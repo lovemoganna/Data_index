@@ -18,23 +18,57 @@ import {
 const iconMap: any = { Users, TrendingUp, Activity, BarChart3, Layers, Link, Clock, Shield, AlertTriangle };
 
 function App() {
-  const [data, setData] = useState<Category[]>(() => dataService.getAll());
+  const [data, setData] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
-  
+
   const [activeTab, setActiveTab] = useState<'monitor' | 'manage' | 'tutorial' | 'analytics'>('monitor');
-  const [selectedCatId, setSelectedCatId] = useState<string>('A'); 
+  const [selectedCatId, setSelectedCatId] = useState<string>('A');
   const [selectedSubId, setSelectedSubId] = useState<string>('ALL');
 
   const [search, setSearch] = useState('');
-  const [isCompact, setIsCompact] = useState(false); 
-  
+  const [isCompact, setIsCompact] = useState(false);
+
   const [isIndModalOpen, setIsIndModalOpen] = useState(false);
   const [isCatModalOpen, setIsCatModalOpen] = useState(false);
   const [editingInd, setEditingInd] = useState<{catId: string, subId: string, indId?: string} | null>(null);
 
+  // 初始化数据加载
   useEffect(() => {
-    dataService.saveAll(data);
-  }, [data]);
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        const loadedData = await dataService.getAll();
+        setData(loadedData);
+      } catch (error) {
+        console.error('Failed to load data:', error);
+        // 如果加载失败，使用默认数据
+        const { INITIAL_DATA } = await import('./constants');
+        setData(INITIAL_DATA);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  // 自动保存数据变化
+  useEffect(() => {
+    if (data.length > 0 && !isLoading) {
+      const saveData = async () => {
+        try {
+          await dataService.saveAll(data);
+        } catch (error) {
+          console.error('Failed to save data:', error);
+        }
+      };
+
+      // 防抖保存，避免频繁写入
+      const timeoutId = setTimeout(saveData, 500);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [data, isLoading]);
 
   useEffect(() => {
     if (darkMode) document.documentElement.classList.add('dark');
@@ -74,30 +108,62 @@ function App() {
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
-  const handleClearAll = () => {
+  const handleClearAll = async () => {
     if(confirm('⚠️ 确定要清空所有指标内容吗？维度本体结构将保留。')) {
-      const cleared = dataService.clearAllIndicators(data);
-      setData(cleared);
-      alert('已成功清空所有监控指标。');
+      try {
+        setIsLoading(true);
+        const cleared = await dataService.clearAllIndicators(data);
+        setData(cleared);
+        alert('已成功清空所有监控指标。');
+      } catch (error) {
+        console.error('清空指标失败:', error);
+        alert('❌ 清空指标失败，请重试。');
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
-  const handleImport = (content: string, fileName: string) => {
+  const handleImport = async (content: string, fileName: string) => {
     try {
-      const importedData = dataService.validateAndImport(content, fileName);
+      setIsLoading(true);
+      const importedData = await dataService.validateAndImport(content, fileName);
       setData(importedData);
       alert(`✅ 体系导入成功！共加载 ${importedData.length} 个维度。`);
     } catch (e: any) {
       alert(`❌ 导入失败: ${e.message}\n请检查文件内容是否符合导出规范。`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
     if(confirm('🔄 确定重置为专家预设体系吗？当前所有修改将被覆盖。')) {
-      const reset = dataService.resetToDefault();
-      setData(reset);
+      try {
+        setIsLoading(true);
+        const reset = await dataService.resetToDefault();
+        setData(reset);
+      } catch (error) {
+        console.error('重置数据失败:', error);
+        alert('❌ 重置数据失败，请重试。');
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
+
+  // Loading 状态显示
+  if (isLoading && data.length === 0) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+          <p className="text-slate-600 dark:text-slate-400">正在加载风险本体数据...</p>
+          <p className="text-sm text-slate-500 dark:text-slate-500 mt-2">首次使用可能需要数据迁移</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 transition-colors duration-300 font-sans selection:bg-blue-100 dark:selection:bg-blue-900">

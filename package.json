@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/react": "^19.2.8",
+    "dexie": "^4.2.1",
     "lucide-react": "^0.562.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
