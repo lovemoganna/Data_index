@@ -11,11 +11,11 @@ import { ManagementPanel } from './components/ManagementPanel';
 import { DataAnalysisPanel } from './components/DataAnalysisPanel';
 import { RealtimeMonitor } from './components/RealtimeMonitor';
 import { AlertRulesEngine } from './components/AlertRulesEngine';
-import { 
-  Search, Sun, Moon, 
+import {
+  Search, Sun, Moon,
   Activity, Users, TrendingUp, BarChart3, Layers, Link, Clock,
   FileSpreadsheet, Shield, AlertTriangle, Eye, Cpu, BookOpen,
-  Maximize2, Minimize2, ChevronRight, Hash, Filter, LayoutGrid
+  Maximize2, Minimize2, ChevronRight, Hash, Filter, LayoutGrid, Bell
 } from 'lucide-react';
 
 const iconMap: any = { Users, TrendingUp, Activity, BarChart3, Layers, Link, Clock, Shield, AlertTriangle };

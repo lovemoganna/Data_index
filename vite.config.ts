@@ -6,6 +6,9 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
       base: mode === 'production' ? '/data_index/' : '/',
+      css: {
+        postcss: './postcss.config.js'
+      },
       build: {
         rollupOptions: {
           input: './index.html'

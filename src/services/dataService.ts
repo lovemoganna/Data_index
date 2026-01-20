@@ -37,72 +37,72 @@ class MECERiskDB extends Dexie {
 // 创建数据库实例
 const db = new MECERiskDB();
 
-// 数据迁移函数：从localStorage迁移到IndexedDB
-const migrateFromLocalStorage = async (): Promise<void> => {
-  try {
-    // 检查是否已经迁移过
-    const migrationKey = 'data_migration_completed';
-    const alreadyMigrated = localStorage.getItem(migrationKey);
+  // 数据迁移函数：从localStorage迁移到IndexedDB
+  const migrateFromLocalStorage = async (): Promise<void> => {
+    try {
+      // 检查是否已经迁移过
+      const migrationKey = 'data_migration_completed';
+      const alreadyMigrated = localStorage.getItem(migrationKey);
 
-    if (alreadyMigrated) {
-      console.log('数据已完成迁移');
-      return;
-    }
-
-    // 尝试从localStorage读取数据
-    const savedData = localStorage.getItem(STORAGE_KEY);
-    let dataToMigrate: Category[] = INITIAL_DATA;
-
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          dataToMigrate = parsed;
-        }
-      } catch (e) {
-        console.warn('解析localStorage数据失败，使用默认数据', e);
+      if (alreadyMigrated) {
+        // 静默返回，不输出日志
+        return;
       }
-    }
 
-    console.log('开始数据迁移到IndexedDB...', dataToMigrate.length, '个分类');
+      // 尝试从localStorage读取数据
+      const savedData = localStorage.getItem(STORAGE_KEY);
+      let dataToMigrate: Category[] = INITIAL_DATA;
 
-    // 清空现有数据
-    await db.categories.clear();
-    await db.indicators.clear();
-
-    // 迁移分类和指标数据
-    for (const category of dataToMigrate) {
-      // 添加分类
-      await db.categories.add({
-        id: category.id,
-        name: category.name,
-        icon: category.icon,
-        description: category.description,
-        color: category.color,
-        subcategories: category.subcategories
-      });
-
-      // 添加该分类下的所有指标
-      for (const subcategory of category.subcategories) {
-        for (const indicator of subcategory.indicators) {
-          await db.indicators.add({
-            ...indicator,
-            categoryId: category.id,
-            subcategoryId: subcategory.id
-          });
+      if (savedData) {
+        try {
+          const parsed = JSON.parse(savedData);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            dataToMigrate = parsed;
+          }
+        } catch (e) {
+          console.warn('解析localStorage数据失败，使用默认数据', e);
         }
       }
+
+      console.log('🔄 开始数据迁移到IndexedDB...', dataToMigrate.length, '个分类');
+
+      // 清空现有数据
+      await db.categories.clear();
+      await db.indicators.clear();
+
+      // 迁移分类和指标数据
+      for (const category of dataToMigrate) {
+        // 添加分类
+        await db.categories.add({
+          id: category.id,
+          name: category.name,
+          icon: category.icon,
+          description: category.description,
+          color: category.color,
+          subcategories: category.subcategories
+        });
+
+        // 添加该分类下的所有指标
+        for (const subcategory of category.subcategories) {
+          for (const indicator of subcategory.indicators) {
+            await db.indicators.add({
+              ...indicator,
+              categoryId: category.id,
+              subcategoryId: subcategory.id
+            });
+          }
+        }
+      }
+
+      // 标记迁移完成
+      localStorage.setItem(migrationKey, 'true');
+      console.log('✅ 数据迁移到IndexedDB完成');
+
+    } catch (error) {
+      console.error('❌ 数据迁移失败:', error);
+      throw error;
     }
-
-    // 标记迁移完成
-    localStorage.setItem(migrationKey, 'true');
-    console.log('✅ 数据迁移到IndexedDB完成');
-
-  } catch (error) {
-    console.error('❌ 数据迁移失败:', error);
-    throw error;
-  }
-};
+  };
 
 // 工具函数：从IndexedDB重建完整的数据结构
 const rebuildDataFromDB = async (): Promise<Category[]> => {
