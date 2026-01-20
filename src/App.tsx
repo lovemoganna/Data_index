@@ -171,7 +171,7 @@ function App() {
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 transition-colors duration-300 font-sans selection:bg-blue-100 dark:selection:bg-blue-900">
       <header className="bg-slate-900 dark:bg-slate-950 text-white border-b border-slate-800 sticky top-0 z-50 shadow-2xl">
-        <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="w-full max-w-none px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="bg-blue-600 p-1.5 rounded-lg text-white shadow-lg shadow-blue-500/20">
                 <Shield size={22} />
@@ -213,7 +213,7 @@ function App() {
         </div>
       </header>
 
-      <main className="max-w-[1600px] mx-auto px-4 py-6">
+      <main className="w-full min-h-screen px-2 py-4">
         {activeTab === 'monitor' && (
           <div className="flex flex-col h-[calc(100vh-140px)] animate-in slide-in-from-bottom-2 duration-500">
             <div className="flex gap-2 mb-6 overflow-x-auto pb-2 custom-scrollbar">
