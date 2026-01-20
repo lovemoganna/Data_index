@@ -3,11 +3,76 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    @apply border-slate-200 dark:border-slate-700;
+  }
+
   html {
     font-family: Inter, system-ui, sans-serif;
+    @apply text-slate-900 dark:text-slate-100;
   }
 
   body {
     @apply bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-200;
+    font-family: Inter, system-ui, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(148 163 184) transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgb(148 163 184);
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgb(100 116 139);
+  }
+
+  /* 确保按钮和其他交互元素有正确的样式 */
+  button {
+    @apply transition-all duration-200;
+  }
+
+  input, textarea, select {
+    @apply transition-all duration-200;
+  }
+
+  /* 表格样式优化 */
+  table {
+    @apply border-collapse;
+  }
+
+  th, td {
+    @apply border-slate-200 dark:border-slate-700;
+  }
+
+  /* 卡片和面板样式 */
+  .card {
+    @apply bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg;
+  }
+
+  /* 确保文本在所有设备上都可读 */
+  .text-readable {
+    @apply text-slate-900 dark:text-slate-100;
   }
 }
