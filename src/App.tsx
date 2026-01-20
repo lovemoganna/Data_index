@@ -333,9 +333,9 @@ function App() {
                                 </td>
                                 <td className={`px-6 py-4 border-r border-slate-100 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed ${isCompact ? 'truncate' : ''}`}>{ind.definition}</td>
                                 <td className="px-6 py-4 border-r border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-700 dark:text-slate-300 leading-relaxed bg-blue-50/10 dark:bg-transparent">{ind.purpose}</td>
-                                <td className="px-6 py-4 border-r border-slate-100 dark:border-slate-800 font-mono text-[11px] text-indigo-500 dark:text-indigo-300 bg-indigo-50/10 dark:bg-transparent font-bold italic">{ind.formula}</td>
+                                <td className="px-6 py-4 border-r border-slate-100 dark:border-slate-800 font-mono text-[11px] text-indigo-500 dark:text-indigo-300 bg-indigo-50/10 dark:bg-transparent font-bold">{ind.formula}</td>
                                 <td className="px-6 py-4 border-r border-slate-100 dark:border-slate-800 text-[11px] font-black text-orange-600 dark:text-orange-400">{ind.threshold}</td>
-                                <td className="px-6 py-4 border-r border-slate-100 dark:border-slate-800 text-[11px] text-green-600 dark:text-green-500 italic font-medium">{ind.calculationCase}</td>
+                                <td className="px-6 py-4 border-r border-slate-100 dark:border-slate-800 text-[11px] text-green-600 dark:text-green-500 font-medium">{ind.calculationCase}</td>
                                 <td className="px-6 py-4 text-[11px] text-red-800 dark:text-red-300 font-medium leading-relaxed bg-red-50/5 dark:bg-transparent">{ind.riskInterpretation}</td>
                             </tr>
                         ))}
