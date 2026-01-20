@@ -213,9 +213,9 @@ function App() {
         </div>
       </header>
 
-      <main className="w-full min-h-screen px-2 py-4">
+      <main className="w-full min-h-screen px-2 py-1">
         {activeTab === 'monitor' && (
-          <div className="flex flex-col h-[calc(100vh-140px)] animate-in slide-in-from-bottom-2 duration-500">
+          <div className="flex flex-col h-[calc(100vh-80px)] animate-in slide-in-from-bottom-2 duration-500">
             <div className="flex gap-2 mb-6 overflow-x-auto pb-2 custom-scrollbar">
                 <button 
                     onClick={() => { setSelectedCatId('ALL'); setSelectedSubId('ALL'); }}
@@ -265,7 +265,7 @@ function App() {
                 </div>
             )}
 
-            <div className="flex items-center justify-between mb-4 px-2">
+            <div className="flex items-center justify-between mb-2 px-2">
                 <div className="flex items-center gap-4 flex-1">
                     <div className="relative w-full max-w-sm">
                         <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />

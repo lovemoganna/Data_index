@@ -1,11 +1,23 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Victor+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 
 html {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Noto Sans SC', 'Inter', system-ui, sans-serif;
 }
 
 body {
   @apply bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-200;
+}
+
+/* 英文内容使用 Victor Mono */
+.font-mono {
+  font-family: 'Victor Mono', 'JetBrains Mono', monospace;
+}
+
+/* 中文内容使用 Noto Sans SC */
+.font-sans {
+  font-family: 'Noto Sans SC', 'Inter', system-ui, sans-serif;
 }
 
 .custom-scrollbar {
