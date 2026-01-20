@@ -42,6 +42,72 @@ interface AlertRulesEngineProps {
 }
 
 export function AlertRulesEngine({ data, riskScore }: AlertRulesEngineProps) {
+  // 默认规则配置
+  const getDefaultRules = (): AlertRule[] => [
+    {
+      id: 'high_risk_alert',
+      name: '高风险告警',
+      description: '当综合风险评分超过70时触发告警',
+      enabled: true,
+      conditions: [{
+        id: 'high_risk_condition',
+        type: 'risk_score',
+        operator: 'gte',
+        value: 70
+      }],
+      actions: [{
+        id: 'internal_alert_action',
+        type: 'internal_alert',
+        config: {
+          title: '高风险告警',
+          message: '系统检测到高风险情况，请立即处理！',
+          severity: 'high'
+        },
+        enabled: true
+      }],
+      priority: 'high',
+      cooldownMinutes: 30,
+      triggerCount: 0
+    },
+    {
+      id: 'critical_risk_alert',
+      name: '紧急风险告警',
+      description: '当综合风险评分超过90时触发紧急告警',
+      enabled: true,
+      conditions: [{
+        id: 'critical_risk_condition',
+        type: 'risk_score',
+        operator: 'gte',
+        value: 90
+      }],
+      actions: [
+        {
+          id: 'internal_alert_critical',
+          type: 'internal_alert',
+          config: {
+            title: '🚨 紧急风险告警',
+            message: '系统检测到紧急风险情况，立即启动应急响应！',
+            severity: 'critical'
+          },
+          enabled: true
+        },
+        {
+          id: 'email_alert',
+          type: 'email',
+          config: {
+            to: 'security@company.com',
+            subject: '紧急风险告警 - MECE系统',
+            message: '系统检测到紧急风险情况，请立即处理！'
+          },
+          enabled: false // 默认关闭，需要配置
+        }
+      ],
+      priority: 'critical',
+      cooldownMinutes: 15,
+      triggerCount: 0
+    }
+  ];
+
   const [rules, setRules] = useState<AlertRule[]>(() => {
     const saved = localStorage.getItem('alert_rules');
     return saved ? JSON.parse(saved) : getDefaultRules();
@@ -235,71 +301,6 @@ export function AlertRulesEngine({ data, riskScore }: AlertRulesEngineProps) {
       });
     }, 3000);
   };
-
-  const getDefaultRules = (): AlertRule[] => [
-    {
-      id: 'high_risk_alert',
-      name: '高风险告警',
-      description: '当综合风险评分超过70时触发告警',
-      enabled: true,
-      conditions: [{
-        id: 'high_risk_condition',
-        type: 'risk_score',
-        operator: 'gte',
-        value: 70
-      }],
-      actions: [{
-        id: 'internal_alert_action',
-        type: 'internal_alert',
-        config: {
-          title: '高风险告警',
-          message: '系统检测到高风险情况，请立即处理！',
-          severity: 'high'
-        },
-        enabled: true
-      }],
-      priority: 'high',
-      cooldownMinutes: 30,
-      triggerCount: 0
-    },
-    {
-      id: 'critical_risk_alert',
-      name: '紧急风险告警',
-      description: '当综合风险评分超过90时触发紧急告警',
-      enabled: true,
-      conditions: [{
-        id: 'critical_risk_condition',
-        type: 'risk_score',
-        operator: 'gte',
-        value: 90
-      }],
-      actions: [
-        {
-          id: 'internal_alert_critical',
-          type: 'internal_alert',
-          config: {
-            title: '🚨 紧急风险告警',
-            message: '系统检测到紧急风险情况，立即启动应急响应！',
-            severity: 'critical'
-          },
-          enabled: true
-        },
-        {
-          id: 'email_alert',
-          type: 'email',
-          config: {
-            to: 'security@company.com',
-            subject: '紧急风险告警 - MECE系统',
-            message: '系统检测到紧急风险情况，请立即处理！'
-          },
-          enabled: false // 默认关闭，需要配置
-        }
-      ],
-      priority: 'critical',
-      cooldownMinutes: 15,
-      triggerCount: 0
-    }
-  ];
 
   const RuleCard = ({ rule }: { rule: Rule }) => (
     <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
