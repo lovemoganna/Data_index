@@ -652,585 +652,766 @@ ORDER BY report_month DESC;
       `
     },
 
-    caseStudies: {
-      title: '经典案例分析',
-      icon: TrendingUp,
-      estimatedTime: '20分钟',
-      difficulty: '专家',
+    cryptoIndicators: {
+      title: '加密货币风险指标详解',
+      icon: Zap,
+      estimatedTime: '25分钟',
+      difficulty: '进阶',
       content: `
-# 经典案例深度剖析
+# 加密货币风险指标体系详解
 
-## 💰 案例一：跨境洗钱团伙识别与打击
+## 🪙 加密货币特有的风险类型
 
-### 🎯 案例背景
-某大型数字货币交易所监测到异常资金流动模式，单日处理可疑交易额超过2000万美元。经初步分析，怀疑涉及有组织的跨境洗钱活动。
+### 1. **链上分析风险指标**
 
-### 📊 触发风险指标
-\`\`\`json
-{
-  "multi_indicator_alert": {
-    "indicators": [
-      {
-        "id": "B1-04",
-        "name": "充提平衡率",
-        "value": "98.7%",
-        "threshold": ">95%",
-        "deviation": "+3.7%",
-        "confidence": "高"
-      },
-      {
-        "id": "B1-03",
-        "name": "多地址归集密度",
-        "value": "47个地址",
-        "threshold": ">50个",
-        "status": "临近阈值",
-        "pattern": "集中归集"
-      },
-      {
-        "id": "A1-04",
-        "name": "密码重置频次",
-        "value": "5次/天",
-        "threshold": ">3次/天",
-        "risk_level": "高",
-        "unusual_pattern": true
-      }
-    ],
-    "overall_risk_score": 89,
-    "risk_category": "跨境洗钱",
-    "priority": "P0"
-  }
-}
-\`\`\`
-
-### 🔍 深度调查过程
-
-#### 阶段一：资金流追踪分析
+#### **地址关联网络分析**
 \`\`\`typescript
-// 资金流网络图构建
-interface TransactionNode {
-  address: string;
-  amount: number;
-  timestamp: Date;
-  risk_score: number;
-  connections: string[];
+interface AddressNetworkAnalysis {
+  // 地址关联深度
+  associationDepth: number;
+  // 网络中心性
+  centralityScore: number;
+  // 资金流向复杂度
+  flowComplexity: number;
+  // 时间模式异常
+  temporalAnomaly: boolean;
 }
 
-class MoneyFlowAnalyzer {
-  async traceMoneyFlow(rootAddress: string, depth: number = 3) {
-    const network = new Map<string, TransactionNode>();
-
-    // 广度优先搜索构建资金流网络
-    const queue = [rootAddress];
+// 黑地址关联深度计算
+class AddressAssociationEngine {
+  async calculateAssociationDepth(targetAddress: string): Promise<number> {
     const visited = new Set<string>();
+    const queue = [targetAddress];
+    let depth = 0;
+    let found = false;
 
-    while (queue.length > 0 && depth > 0) {
-      const currentLevel = queue.splice(0);
-      const nextLevel: string[] = [];
+    // 广度优先搜索
+    while (queue.length > 0 && depth < 5) {
+      const levelSize = queue.length;
+      depth++;
 
-      for (const address of currentLevel) {
-        if (visited.has(address)) continue;
-        visited.add(address);
+      for (let i = 0; i < levelSize; i++) {
+        const currentAddress = queue.shift()!;
 
-        const transactions = await this.getAddressTransactions(address);
-        const node = this.createTransactionNode(address, transactions);
+        if (visited.has(currentAddress)) continue;
+        visited.add(currentAddress);
 
-        network.set(address, node);
-
-        // 添加下一层地址
-        for (const tx of transactions) {
-          if (!visited.has(tx.counterparty)) {
-            nextLevel.push(tx.counterparty);
-          }
+        // 检查是否为已知风险地址
+        if (await this.isKnownRiskAddress(currentAddress)) {
+          found = true;
+          break;
         }
+
+        // 获取关联地址
+        const associatedAddresses = await this.getAssociatedAddresses(currentAddress);
+        queue.push(...associatedAddresses.filter(addr => !visited.has(addr)));
       }
 
-      queue.push(...nextLevel);
-      depth--;
+      if (found) break;
     }
 
-    return this.analyzeNetworkPatterns(network);
+    return found ? depth : -1;
   }
 
-  private analyzeNetworkPatterns(network: Map<string, TransactionNode>) {
-    // 检测循环洗钱模式
-    const cycles = this.detectCycles(network);
+  private async isKnownRiskAddress(address: string): Promise<boolean> {
+    // 查询风险地址库
+    const riskDatabases = [
+      'OFAC_SDN', 'Chainalysis', 'Elliptic', 'CipherTrace'
+    ];
 
-    // 计算网络中心性
-    const centrality = this.calculateCentrality(network);
+    for (const db of riskDatabases) {
+      if (await this.queryRiskDatabase(db, address)) {
+        return true;
+      }
+    }
 
-    // 识别层级结构
-    const hierarchy = this.identifyHierarchy(network);
+    return false;
+  }
+}
+\`\`\`
+
+#### **资金流向异常检测**
+\`\`\`typescript
+interface FundsFlowPattern {
+  // 资金流转速度
+  flowVelocity: number;
+  // 地址跳跃次数
+  hopCount: number;
+  // 金额保持率
+  amountRetention: number;
+  // 时间窗口
+  timeWindow: number;
+}
+
+class FundsFlowAnalyzer {
+  // 检测典型的洗钱模式
+  detectLaunderingPatterns(transactions: Transaction[]): LaunderingPattern[] {
+    const patterns: LaunderingPattern[] = [];
+
+    // 1. 快进快出模式检测
+    const quickFlipPatterns = this.detectQuickFlipPatterns(transactions);
+    patterns.push(...quickFlipPatterns);
+
+    // 2. 循环交易检测
+    const circularPatterns = this.detectCircularTransactions(transactions);
+    patterns.push(...circularPatterns);
+
+    // 3. 金字塔式分发
+    const pyramidPatterns = this.detectPyramidDistribution(transactions);
+    patterns.push(...pyramidPatterns);
+
+    // 4. 定时释放模式
+    const timedReleasePatterns = this.detectTimedReleasePatterns(transactions);
+    patterns.push(...timedReleasePatterns);
+
+    return patterns;
+  }
+
+  private detectQuickFlipPatterns(transactions: Transaction[]): LaunderingPattern[] {
+    const patterns: LaunderingPattern[] = [];
+
+    // 分析每个地址的快进快出行为
+    const addressGroups = this.groupByAddress(transactions);
+
+    for (const [address, txs] of addressGroups) {
+      const inflows = txs.filter(tx => tx.to === address);
+      const outflows = txs.filter(tx => tx.from === address);
+
+      // 计算平均持有时间
+      const avgHoldingTime = this.calculateAverageHoldingTime(inflows, outflows);
+
+      if (avgHoldingTime < 3600000) { // 1小时内
+        const totalVolume = inflows.reduce((sum, tx) => sum + tx.amount, 0);
+
+        if (totalVolume > 10000) { // 大额快进快出
+          patterns.push({
+            type: 'quick_flip',
+            address,
+            severity: 'high',
+            indicators: {
+              avgHoldingTime,
+              totalVolume,
+              transactionCount: txs.length
+            }
+          });
+        }
+      }
+    }
+
+    return patterns;
+  }
+}
+\`\`\`
+
+### 2. **交易所特有风险指标**
+
+#### **交易行为模式分析**
+\`\`\`typescript
+interface TradingBehaviorPattern {
+  // 交易频率
+  frequency: number;
+  // 交易金额分布
+  amountDistribution: number[];
+  // 时间分布
+  timeDistribution: number[];
+  // 交易对手分布
+  counterpartyDiversity: number;
+  // 策略一致性
+  strategyConsistency: number;
+}
+
+class TradingBehaviorAnalyzer {
+  // 检测机器人交易特征
+  detectBotTrading(signals: TradingSignal[]): BotDetectionResult {
+    const features = this.extractFeatures(signals);
+
+    // 1. 频率异常检测
+    const frequencyAnomaly = this.detectFrequencyAnomaly(features.frequency);
+
+    // 2. 时间模式分析
+    const timingPattern = this.analyzeTimingPattern(features.timeDistribution);
+
+    // 3. 金额分布分析
+    const amountPattern = this.analyzeAmountDistribution(features.amountDistribution);
+
+    // 4. 执行速度分析
+    const executionSpeed = this.measureExecutionSpeed(signals);
+
+    // 5. 策略一致性检查
+    const strategyConsistency = this.checkStrategyConsistency(signals);
+
+    // 综合评分
+    const botScore = this.calculateBotScore({
+      frequencyAnomaly,
+      timingPattern,
+      amountPattern,
+      executionSpeed,
+      strategyConsistency
+    });
 
     return {
-      cycles,
-      centrality,
-      hierarchy,
-      risk_patterns: this.classifyRiskPatterns(network)
+      isBot: botScore > 0.8,
+      confidence: botScore,
+      indicators: {
+        frequencyAnomaly,
+        timingPattern,
+        amountPattern,
+        executionSpeed,
+        strategyConsistency
+      },
+      riskLevel: this.determineRiskLevel(botScore)
     };
   }
-}
-\`\`\`
 
-#### 阶段二：行为模式识别
-\`\`\`python
-import pandas as pd
-import numpy as np
-from sklearn.cluster import DBSCAN
-from sklearn.preprocessing import StandardScaler
-
-class BehaviorPatternAnalyzer:
-    def __init__(self, transaction_data):
-        self.data = self.preprocess_data(transaction_data)
-
-    def preprocess_data(self, raw_data):
-        # 特征工程
-        features = pd.DataFrame()
-
-        # 时间特征
-        features['hour_of_day'] = pd.to_datetime(raw_data['timestamp']).dt.hour
-        features['day_of_week'] = pd.to_datetime(raw_data['timestamp']).dt.dayofweek
-        features['is_weekend'] = features['day_of_week'].isin([5, 6]).astype(int)
-
-        # 金额特征
-        features['amount_log'] = np.log1p(raw_data['amount'])
-        features['amount_rounded'] = (raw_data['amount'] % 100 == 0).astype(int)
-        features['amount_common'] = raw_data['amount'].isin([1000, 5000, 10000]).astype(int)
-
-        # 频率特征
-        features['tx_per_hour'] = raw_data.groupby(
-          pd.to_datetime(raw_data['timestamp']).dt.hour
-        )['amount'].transform('count')
-
-        return features
-
-    def detect_anomalous_patterns(self):
-        # 标准化特征
-        scaler = StandardScaler()
-        scaled_features = scaler.fit_transform(self.data)
-
-        # 密度聚类检测异常模式
-        clustering = DBSCAN(eps=0.5, min_samples=5)
-        clusters = clustering.fit_predict(scaled_features)
-
-        # 识别异常簇
-        anomalous_clusters = []
-        for cluster_id in np.unique(clusters):
-            if cluster_id == -1:  # DBSCAN噪声点
-                continue
-
-            cluster_data = self.data[clusters == cluster_id]
-            cluster_size = len(cluster_data)
-
-            # 计算簇的异常程度
-            anomaly_score = self.calculate_cluster_anomaly(cluster_data)
-
-            if anomaly_score > 0.8:  # 高异常阈值
-                anomalous_clusters.append({
-                    'cluster_id': cluster_id,
-                    'size': cluster_size,
-                    'anomaly_score': anomaly_score,
-                    'pattern_type': self.classify_pattern_type(cluster_data)
-                })
-
-        return anomalous_clusters
-
-    def calculate_cluster_anomaly(self, cluster_data):
-        # 多维度异常评分
-        time_anomaly = self.score_time_pattern(cluster_data)
-        amount_anomaly = self.score_amount_pattern(cluster_data)
-        frequency_anomaly = self.score_frequency_pattern(cluster_data)
-
-        # 加权综合评分
-        return (
-            time_anomaly * 0.3 +
-            amount_anomaly * 0.4 +
-            frequency_anomaly * 0.3
-        )
-\`\`\`
-
-#### 阶段三：地理位置分析
-\`\`\`typescript
-interface GeoLocationData {
-  ip: string;
-  country: string;
-  region: string;
-  city: string;
-  coordinates: [number, number];
-  risk_score: number;
-}
-
-class GeoAnalysisEngine {
-  async analyzeLocationPatterns(transactions: Transaction[]): Promise<GeoAnalysisResult> {
-    const locations = await this.extractLocations(transactions);
+  private extractFeatures(signals: TradingSignal[]): TradingBehaviorPattern {
+    const timestamps = signals.map(s => s.timestamp);
+    const amounts = signals.map(s => s.amount);
 
     return {
-      location_diversity: this.calculateLocationDiversity(locations),
-      high_risk_regions: this.identifyHighRiskRegions(locations),
-      unusual_patterns: this.detectUnusualGeoPatterns(locations),
-      network_analysis: this.analyzeGeoNetwork(locations)
+      frequency: this.calculateFrequency(timestamps),
+      amountDistribution: this.calculateDistribution(amounts),
+      timeDistribution: this.calculateTimeDistribution(timestamps),
+      counterpartyDiversity: this.calculateCounterpartyDiversity(signals),
+      strategyConsistency: this.measureStrategyConsistency(signals)
     };
   }
 
-  private calculateLocationDiversity(locations: GeoLocationData[]): number {
-    const uniqueCountries = new Set(locations.map(l => l.country));
-    const uniqueRegions = new Set(locations.map(l => \`\${l.country}-\${l.region}\`));
+  private calculateFrequency(timestamps: number[]): number {
+    if (timestamps.length < 2) return 0;
 
-    // 计算地理多样性指数
-    const diversity_score = Math.log(uniqueCountries.size + 1) * Math.log(uniqueRegions.size + 1);
+    const intervals = [];
+    for (let i = 1; i < timestamps.length; i++) {
+      intervals.push(timestamps[i] - timestamps[i - 1]);
+    }
 
-    // 归一化到0-1范围
-    return Math.min(diversity_score / 10, 1);
+    const avgInterval = intervals.reduce((sum, interval) => sum + interval, 0) / intervals.length;
+    return 1000 / avgInterval; // 每秒交易次数
   }
 
-  private identifyHighRiskRegions(locations: GeoLocationData[]): string[] {
-    const risk_threshold = 0.7;
-    const region_stats = this.calculateRegionStats(locations);
+  private detectFrequencyAnomaly(frequency: number): number {
+    // 人类平均交易频率通常在每分钟1-5次
+    // 机器人可能达到每秒10次以上
+    const humanMaxFrequency = 0.5; // 每秒0.5次
+    const botMinFrequency = 5; // 每秒5次
 
-    return region_stats
-      .filter(region => region.avg_risk_score > risk_threshold)
-      .sort((a, b) => b.avg_risk_score - a.avg_risk_score)
-      .slice(0, 5)
-      .map(region => region.region);
-  }
-}
-\`\`\`
+    if (frequency < humanMaxFrequency) return 0;
+    if (frequency > botMinFrequency) return 1;
 
-### 🎯 处置策略与结果
-
-#### 即时响应措施
-1. **账户冻结**：立即冻结涉案账户及关联账户
-2. **资金控制**：暂停可疑资金的提币操作
-3. **交易拦截**：阻断正在进行的异常交易
-
-#### 调查取证过程
-1. **链上分析**：追踪所有相关地址的交易历史
-2. **情报收集**：关联已知黑产团伙的特征模式
-3. **国际合作**：与相关司法机构共享情报信息
-
-#### 最终处理结果
-\`\`\`json
-{
-  "case_outcome": {
-    "frozen_accounts": 47,
-    "frozen_assets": "$2,300,000",
-    "blocked_transactions": 156,
-    "legal_referral": true,
-    "international_cooperation": true,
-    "case_status": "已移交司法机关"
-  },
-  "system_improvements": {
-    "new_indicators": 3,
-    "threshold_adjustments": 5,
-    "pattern_updates": 2,
-    "detection_accuracy": "+15%"
+    // 线性插值
+    return (frequency - humanMaxFrequency) / (botMinFrequency - humanMaxFrequency);
   }
 }
 \`\`\`
 
----
-
-## 🕵️ 案例二：高频交易机器人检测
-
-### 📈 市场异常信号
-交易所监控系统检测到某交易对出现明显的价格操纵迹象：
-- 成交量突然放大300%
-- 价格在极短时间内大幅波动
-- 交易频率异常集中
-
-### 🤖 技术检测方案
+#### **订单簿操纵检测**
 \`\`\`typescript
-class HFTDetectionEngine {
-  private readonly DETECTION_WINDOW = 300; // 5分钟检测窗口
-  private readonly HFT_THRESHOLDS = {
-    tradeFrequency: 100,     // 每秒交易次数
-    orderBookDepth: 0.8,     // 挂单簿集中度
-    priceSlippage: 0.001,    // 价格滑点阈值
-    timeDistribution: 0.1     // 时间分布集中度
-  };
+interface OrderBookManipulation {
+  // 大单挂撤比
+  largeOrderCancelRatio: number;
+  // 挂单时间分布
+  orderTimingDistribution: number[];
+  // 价格层级集中度
+  priceLevelConcentration: number;
+  // 订单大小分布
+  orderSizeDistribution: number[];
+}
 
-  async detectHFTActivity(marketData: MarketData): Promise<HFTAnalysis> {
-    const analysis = {
-      isHFT: false,
+class OrderBookManipulationDetector {
+  // 检测订单簿操纵行为
+  detectManipulation(orderBook: OrderBook, recentTrades: Trade[]): ManipulationAnalysis {
+    const analysis: ManipulationAnalysis = {
+      isManipulated: false,
       confidence: 0,
-      indicators: [],
-      risk_score: 0
+      manipulationTypes: [],
+      indicators: {}
     };
 
-    // 1. 交易频率分析
-    const frequencyScore = this.analyzeTradeFrequency(marketData);
-    analysis.indicators.push({
-      name: '交易频率',
-      score: frequencyScore,
-      threshold: this.HFT_THRESHOLDS.tradeFrequency
-    });
+    // 1. 洗盘行为检测（大单频繁挂撤）
+    const washTrading = this.detectWashTrading(orderBook);
+    if (washTrading.confidence > 0.7) {
+      analysis.manipulationTypes.push('wash_trading');
+      analysis.indicators.washTrading = washTrading;
+    }
 
-    // 2. 挂单簿分析
-    const orderBookScore = this.analyzeOrderBookDepth(marketData);
-    analysis.indicators.push({
-      name: '挂单集中度',
-      score: orderBookScore,
-      threshold: this.HFT_THRESHOLDS.orderBookDepth
-    });
+    // 2. 诱导行为检测（虚假挂单诱导）
+    const spoofing = this.detectSpoofing(orderBook, recentTrades);
+    if (spoofing.confidence > 0.7) {
+      analysis.manipulationTypes.push('spoofing');
+      analysis.indicators.spoofing = spoofing;
+    }
 
-    // 3. 价格行为分析
-    const priceScore = this.analyzePriceBehavior(marketData);
-    analysis.indicators.push({
-      name: '价格滑点',
-      score: priceScore,
-      threshold: this.HFT_THRESHOLDS.priceSlippage
-    });
+    // 3. 层压行为检测（集中挂单影响价格）
+    const layering = this.detectLayering(orderBook);
+    if (layering.confidence > 0.7) {
+      analysis.manipulationTypes.push('layering');
+      analysis.indicators.layering = layering;
+    }
 
-    // 4. 时间分布分析
-    const timeScore = this.analyzeTimeDistribution(marketData);
-    analysis.indicators.push({
-      name: '时间集中度',
-      score: timeScore,
-      threshold: this.HFT_THRESHOLDS.timeDistribution
-    });
+    // 4. 报价操纵检测
+    const quoteStuffing = this.detectQuoteStuffing(orderBook);
+    if (quoteStuffing.confidence > 0.7) {
+      analysis.manipulationTypes.push('quote_stuffing');
+      analysis.indicators.quoteStuffing = quoteStuffing;
+    }
 
-    // 计算综合风险评分
-    analysis.risk_score = this.calculateCompositeScore([
-      frequencyScore, orderBookScore, priceScore, timeScore
+    // 计算综合置信度
+    analysis.confidence = this.calculateOverallConfidence([
+      washTrading.confidence,
+      spoofing.confidence,
+      layering.confidence,
+      quoteStuffing.confidence
     ]);
 
-    analysis.isHFT = analysis.risk_score > 0.8;
-    analysis.confidence = analysis.risk_score;
+    analysis.isManipulated = analysis.confidence > 0.6;
 
     return analysis;
   }
 
-  private analyzeTradeFrequency(data: MarketData): number {
-    const recentTrades = data.trades.filter(
-      trade => Date.now() - trade.timestamp < this.DETECTION_WINDOW * 1000
-    );
-
-    return recentTrades.length / this.DETECTION_WINDOW; // 每秒交易数
-  }
-
-  private analyzeOrderBookDepth(data: MarketData): number {
-    // 计算订单簿的集中度
-    const topOrders = data.orderBook.bids.slice(0, 10).concat(data.orderBook.asks.slice(0, 10));
-    const totalVolume = topOrders.reduce((sum, order) => sum + order.amount, 0);
-    const top10PercentVolume = topOrders
-      .sort((a, b) => b.amount - a.amount)
-      .slice(0, Math.ceil(topOrders.length * 0.1))
-      .reduce((sum, order) => sum + order.amount, 0);
-
-    return top10PercentVolume / totalVolume;
-  }
-
-  private calculateCompositeScore(scores: number[]): number {
-    // 加权平均计算
-    const weights = [0.3, 0.3, 0.2, 0.2]; // 频率30%, 挂单30%, 价格20%, 时间20%
-    const weightedSum = scores.reduce((sum, score, index) => sum + score * weights[index], 0);
-    const maxPossibleScore = weights.reduce((sum, weight) => sum + weight, 0);
-
-    return weightedSum / maxPossibleScore;
-  }
-}
-\`\`\`
-
-### ⚡ 实时干预措施
-1. **动态调整费率**：对可疑账户提高交易手续费
-2. **限速控制**：限制异常账户的交易频率
-3. **价格稳定机制**：触发价格稳定算法
-4. **监控升级**：增加该账户的监控等级
-
-### 📊 技术改进成果
-- **检测准确率**：95%（之前80%）
-- **响应时间**：从30秒缩短到5秒
-- **误报率**：从8%降低到2%
-- **系统稳定性**：HFT攻击成功拦截100%
-
----
-
-## 🎯 案例三：DeFi协议攻击防护
-
-### 🚨 攻击事件概述
-某主流DeFi协议遭受闪电贷攻击，损失超过1000万美元。攻击者利用价格预言机操纵和重入漏洞实施了复杂的套利攻击。
-
-### 🔒 风险监控体系的角色
-
-#### 预攻击检测信号
-\`\`\`json
-{
-  "early_warning_signals": [
-    {
-      "indicator": "异常大额闪电贷",
-      "value": "$50M",
-      "threshold": "$10M",
-      "risk_level": "极高"
-    },
-    {
-      "indicator": "价格预言机异常波动",
-      "deviation": "45%",
-      "time_window": "30秒",
-      "manipulation_probability": "92%"
-    },
-    {
-      "indicator": "合约交互复杂度",
-      "interaction_depth": 8,
-      "threshold": 5,
-      "attack_pattern": "重入攻击"
-    }
-  ],
-  "system_response": {
-    "alert_priority": "P0",
-    "automatic_actions": [
-      "暂停大额闪电贷",
-      "冻结可疑地址",
-      "通知协议管理员"
-    ],
-    "manual_review": "立即启动"
-  }
-}
-\`\`\`
-
-#### 攻击链分析
-\`\`\`typescript
-interface AttackChain {
-  stages: AttackStage[];
-  total_loss: number;
-  exploited_vulnerabilities: string[];
-  attack_complexity: number;
-}
-
-class DeFiAttackAnalyzer {
-  async analyzeAttackChain(transactionHash: string): Promise<AttackChain> {
-    const attackTx = await this.getTransactionDetails(transactionHash);
-    const attackChain = await this.reconstructAttackFlow(attackTx);
+  private detectWashTrading(orderBook: OrderBook): ManipulationIndicator {
+    // 分析大单的挂撤行为
+    const largeOrders = this.getLargeOrders(orderBook);
+    const cancelRatio = largeOrders.filter(order => order.cancelled).length / largeOrders.length;
 
     return {
-      stages: attackChain.stages,
-      total_loss: this.calculateTotalLoss(attackChain),
-      exploited_vulnerabilities: this.identifyVulnerabilities(attackChain),
-      attack_complexity: this.assessAttackComplexity(attackChain)
+      confidence: Math.min(cancelRatio * 2, 1), // 归一化到0-1
+      indicators: { cancelRatio, largeOrderCount: largeOrders.length }
     };
   }
 
-  private async reconstructAttackFlow(rootTx: Transaction): Promise<AttackFlow> {
-    const stages: AttackStage[] = [];
-    const visited = new Set<string>();
-    const queue = [rootTx];
+  private detectSpoofing(orderBook: OrderBook, trades: Trade[]): ManipulationIndicator {
+    // 检测虚假挂单（挂单后立即取消，且远离市场价格）
+    const spoofOrders = orderBook.asks.concat(orderBook.bids)
+      .filter(order =>
+        order.cancelled &&
+        Math.abs(order.price - this.getMarketPrice(trades)) > this.getPriceThreshold()
+      );
 
-    while (queue.length > 0) {
-      const currentTx = queue.shift()!;
-      if (visited.has(currentTx.hash)) continue;
+    const spoofRatio = spoofOrders.length / (orderBook.asks.length + orderBook.bids.length);
 
-      visited.add(currentTx.hash);
-
-      // 识别攻击阶段
-      const stage = this.classifyAttackStage(currentTx);
-      stages.push(stage);
-
-      // 查找后续交易
-      const subsequentTxs = await this.findSubsequentTransactions(currentTx);
-      queue.push(...subsequentTxs.filter(tx => !visited.has(tx.hash)));
-    }
-
-    return { stages, complexity: this.calculateFlowComplexity(stages) };
+    return {
+      confidence: Math.min(spoofRatio * 3, 1),
+      indicators: { spoofOrderCount: spoofOrders.length, spoofRatio }
+    };
   }
 }
 \`\`\`
 
-### 🛡️ 防御策略升级
+### 3. **DeFi协议特有风险指标**
 
-#### 实时监控增强
-1. **闪电贷监控**：大额闪电贷的实时检测和限制
-2. **预言机保护**：多源价格数据的交叉验证
-3. **合约安全**：智能合约漏洞的自动化扫描
-
-#### 自动化响应机制
+#### **智能合约风险评估**
 \`\`\`typescript
-class AutomatedDefenseSystem {
-  private readonly RESPONSE_THRESHOLDS = {
-    CRITICAL: { threshold: 0.9, actions: ['emergency_pause', 'admin_alert'] },
-    HIGH: { threshold: 0.7, actions: ['limit_transactions', 'increase_monitoring'] },
-    MEDIUM: { threshold: 0.5, actions: ['flag_suspicious', 'log_detailed'] }
-  };
+interface ContractRiskAssessment {
+  // 代码复杂度
+  codeComplexity: number;
+  // 依赖关系复杂度
+  dependencyComplexity: number;
+  // 状态变量风险
+  stateVariableRisk: number;
+  // 函数调用风险
+  functionCallRisk: number;
+  // 访问控制风险
+  accessControlRisk: number;
+}
 
-  async respondToThreat(threat: ThreatAnalysis): Promise<ResponseActions> {
-    const riskLevel = this.assessRiskLevel(threat);
-    const threshold = this.RESPONSE_THRESHOLDS[riskLevel];
+class SmartContractRiskAnalyzer {
+  async assessContractRisk(contractAddress: string): Promise<ContractRiskAssessment> {
+    // 获取合约源码
+    const sourceCode = await this.getContractSource(contractAddress);
 
-    if (threat.confidence >= threshold.threshold) {
-      return await this.executeActions(threshold.actions, threat);
-    }
+    // 代码静态分析
+    const codeAnalysis = await this.performStaticAnalysis(sourceCode);
 
-    return { actions: [], reason: 'below_threshold' };
+    // 依赖分析
+    const dependencyAnalysis = await this.analyzeDependencies(contractAddress);
+
+    // 历史交易分析
+    const historicalAnalysis = await this.analyzeHistoricalTransactions(contractAddress);
+
+    return {
+      codeComplexity: codeAnalysis.complexity,
+      dependencyComplexity: dependencyAnalysis.complexity,
+      stateVariableRisk: codeAnalysis.stateRisk,
+      functionCallRisk: codeAnalysis.functionRisk,
+      accessControlRisk: codeAnalysis.accessRisk
+    };
   }
 
-  private async executeActions(actions: string[], threat: ThreatAnalysis) {
-    const results = [];
+  private async performStaticAnalysis(sourceCode: string): Promise<CodeAnalysis> {
+    // 检测常见的漏洞模式
+    const vulnerabilities = {
+      reentrancy: this.detectReentrancy(sourceCode),
+      overflow: this.detectOverflow(sourceCode),
+      accessControl: this.detectAccessControlIssues(sourceCode),
+      oracleManipulation: this.detectOracleDependencies(sourceCode)
+    };
 
-    for (const action of actions) {
-      try {
-        const result = await this.executeAction(action, threat);
-        results.push({ action, success: true, result });
-      } catch (error) {
-        results.push({ action, success: false, error: error.message });
-      }
+    return {
+      complexity: this.calculateCodeComplexity(sourceCode),
+      stateRisk: this.assessStateVariableRisk(sourceCode),
+      functionRisk: this.assessFunctionCallRisk(sourceCode),
+      accessRisk: this.assessAccessControlRisk(sourceCode),
+      vulnerabilities
+    };
+  }
+
+  private detectReentrancy(code: string): boolean {
+    // 检测重入攻击模式
+    const reentrancyPatterns = [
+      /call\.value/,
+      /\.send\(/,
+      /\.transfer\(/,
+      /external call/
+    ];
+
+    return reentrancyPatterns.some(pattern =>
+      pattern.test(code.toLowerCase())
+    );
+  }
+
+  private detectOverflow(code: string): boolean {
+    // 检测整数溢出风险
+    const overflowIndicators = [
+      /\+=.*[^\%]/,  // 加法操作
+      /\-=.*[^\%]/,  // 减法操作
+      /\*=/,         // 乘法操作
+      /uint/,        // 使用uint类型
+      /int\d+/       // 使用int类型
+    ];
+
+    const overflowCount = overflowIndicators.filter(pattern =>
+      pattern.test(code)
+    ).length;
+
+    return overflowCount > 3; // 超过3个指标认为是高风险
+  }
+}
+\`\`\`
+
+#### **预言机操纵检测**
+\`\`\`typescript
+interface OracleManipulationRisk {
+  // 价格偏差程度
+  priceDeviation: number;
+  // 时间戳操纵风险
+  timestampRisk: number;
+  // 单源依赖风险
+  singleSourceRisk: number;
+  // 更新频率异常
+  updateFrequencyRisk: number;
+}
+
+class OracleManipulationDetector {
+  // 检测预言机价格操纵
+  async detectPriceManipulation(
+    oracleData: OraclePriceData[],
+    marketData: MarketPriceData[]
+  ): Promise<OracleManipulationRisk> {
+
+    // 1. 价格偏差分析
+    const priceDeviation = this.analyzePriceDeviation(oracleData, marketData);
+
+    // 2. 时间戳一致性检查
+    const timestampRisk = this.checkTimestampConsistency(oracleData);
+
+    // 3. 数据源多样性评估
+    const singleSourceRisk = this.assessSourceDiversity(oracleData);
+
+    // 4. 更新频率分析
+    const updateFrequencyRisk = this.analyzeUpdateFrequency(oracleData);
+
+    return {
+      priceDeviation,
+      timestampRisk,
+      singleSourceRisk,
+      updateFrequencyRisk
+    };
+  }
+
+  private analyzePriceDeviation(
+    oracleData: OraclePriceData[],
+    marketData: MarketPriceData[]
+  ): number {
+    if (oracleData.length === 0 || marketData.length === 0) return 0;
+
+    // 计算价格偏差百分比
+    const deviations = oracleData.map(oraclePrice => {
+      const marketPrice = this.findClosestMarketPrice(oraclePrice.timestamp, marketData);
+      if (!marketPrice) return 0;
+
+      return Math.abs(oraclePrice.price - marketPrice.price) / marketPrice.price;
+    });
+
+    const avgDeviation = deviations.reduce((sum, dev) => sum + dev, 0) / deviations.length;
+
+    // 超过5%的偏差认为是高风险
+    return Math.min(avgDeviation / 0.05, 1);
+  }
+
+  private checkTimestampConsistency(oracleData: OraclePriceData[]): number {
+    if (oracleData.length < 2) return 0;
+
+    // 检查时间戳是否过于规律（可能是伪造的）
+    const intervals = [];
+    for (let i = 1; i < oracleData.length; i++) {
+      intervals.push(oracleData[i].timestamp - oracleData[i-1].timestamp);
     }
 
-    return { actions: results, executed_at: new Date() };
+    const avgInterval = intervals.reduce((sum, interval) => sum + interval, 0) / intervals.length;
+    const variance = intervals.reduce((sum, interval) => sum + Math.pow(interval - avgInterval, 2), 0) / intervals.length;
+    const regularity = Math.sqrt(variance) / avgInterval; // 变异系数
+
+    // 过于规律的时间戳可能是伪造的
+    return Math.max(0, regularity - 0.1) / 0.9; // 归一化
   }
 }
 \`\`\`
 
 ---
 
-## 📈 综合效果评估
+## 🔬 高级分析技术
 
-### 🎯 拦截效能统计
-\`\`\`chart
-{
-  "type": "bar",
-  "data": {
-    "labels": ["洗钱拦截", "市场操纵", "机器人攻击", "DeFi攻击", "其他违规"],
-    "datasets": [{
-      "label": "拦截金额（万美元）",
-      "data": [2300, 890, 456, 1200, 340],
-      "backgroundColor": [
-        "rgba(255, 99, 132, 0.8)",
-        "rgba(54, 162, 235, 0.8)",
-        "rgba(255, 205, 86, 0.8)",
-        "rgba(75, 192, 192, 0.8)",
-        "rgba(153, 102, 255, 0.8)"
-      ]
-    }]
-  },
-  "options": {
-    "responsive": true,
-    "plugins": {
-      "title": {
-        "display": true,
-        "text": "2024年风险拦截统计"
-      }
+### **机器学习增强检测**
+\`\`\`python
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+
+class MLRiskDetector:
+    def __init__(self):
+        self.model = RandomForestClassifier(
+            n_estimators=100,
+            max_depth=10,
+            random_state=42
+        )
+        self.feature_columns = [
+            'transaction_amount', 'transaction_frequency',
+            'address_age', 'interactions_count', 'gas_price',
+            'contract_complexity', 'holder_concentration'
+        ]
+
+    def train_model(self, historical_data: pd.DataFrame, labels: pd.Series):
+        # 特征工程
+        features = self.engineer_features(historical_data)
+
+        # 训练集验证集分割
+        X_train, X_test, y_train, y_test = train_test_split(
+            features, labels, test_size=0.2, random_state=42
+        )
+
+        # 模型训练
+        self.model.fit(X_train, y_train)
+
+        # 模型评估
+        predictions = self.model.predict(X_test)
+        print(classification_report(y_test, predictions))
+
+    def predict_risk(self, transaction_data: pd.DataFrame) -> np.ndarray:
+        features = self.engineer_features(transaction_data)
+        return self.model.predict_proba(features)[:, 1]  # 返回风险概率
+
+    def engineer_features(self, data: pd.DataFrame) -> pd.DataFrame:
+        features = pd.DataFrame()
+
+        # 金额特征
+        features['amount_log'] = np.log1p(data['transaction_amount'])
+        features['amount_percentile'] = data['transaction_amount'].rank(pct=True)
+
+        # 频率特征
+        features['tx_per_hour'] = data.groupby(
+            pd.to_datetime(data['timestamp']).dt.hour
+        )['transaction_amount'].transform('count')
+
+        # 地址特征
+        features['address_age_days'] = (
+            pd.Timestamp.now() - pd.to_datetime(data['address_creation'])
+        ).dt.days
+
+        # 网络特征
+        features['unique_interactions'] = data.groupby('address')['counterparty'].transform('nunique')
+        features['interaction_diversity'] = features['unique_interactions'] / data['transaction_count']
+
+        # 合约特征（如果是合约交互）
+        if 'contract_address' in data.columns:
+            features['contract_complexity'] = data['contract_functions'].fillna(0)
+            features['gas_efficiency'] = data['gas_used'] / data['gas_limit']
+
+        return features[self.feature_columns].fillna(0)
+\`\`\`
+
+### **实时流处理架构**
+\`\`\`typescript
+interface StreamProcessingConfig {
+  windowSize: number;        // 时间窗口大小（秒）
+  slideInterval: number;     // 滑动间隔（秒）
+  riskThreshold: number;     // 风险阈值
+  alertCooldown: number;     // 告警冷却时间（秒）
+}
+
+class RealTimeRiskProcessor {
+  private config: StreamProcessingConfig;
+  private eventBuffer: RiskEvent[] = [];
+  private activeAlerts: Map<string, AlertState> = new Map();
+  private processors: RiskProcessor[] = [];
+
+  constructor(config: StreamProcessingConfig) {
+    this.config = config;
+    this.initializeProcessors();
+    this.startProcessing();
+  }
+
+  private initializeProcessors() {
+    // 初始化各种风险检测处理器
+    this.processors = [
+      new TransactionAnomalyProcessor(),
+      new AddressRiskProcessor(),
+      new ContractVulnerabilityProcessor(),
+      new MarketManipulationProcessor(),
+      new DeFiExploitProcessor()
+    ];
+  }
+
+  async processEvent(event: RiskEvent): Promise<void> {
+    // 添加到缓冲区
+    this.eventBuffer.push(event);
+
+    // 清理过期事件
+    this.cleanupExpiredEvents();
+
+    // 并行处理所有风险检测器
+    const riskAssessments = await Promise.all(
+      this.processors.map(processor =>
+        processor.analyze(this.eventBuffer, event)
+      )
+    );
+
+    // 聚合风险评估结果
+    const aggregatedRisk = this.aggregateRiskAssessments(riskAssessments);
+
+    // 检查是否需要触发告警
+    await this.checkAndTriggerAlerts(aggregatedRisk, event);
+  }
+
+  private cleanupExpiredEvents(): void {
+    const cutoffTime = Date.now() - (this.config.windowSize * 1000);
+    this.eventBuffer = this.eventBuffer.filter(
+      event => event.timestamp > cutoffTime
+    );
+  }
+
+  private aggregateRiskAssessments(assessments: RiskAssessment[]): AggregatedRisk {
+    const totalRisk = assessments.reduce((sum, assessment) => sum + assessment.riskScore, 0);
+    const avgRisk = totalRisk / assessments.length;
+
+    const maxRiskAssessment = assessments.reduce((max, current) =>
+      current.riskScore > max.riskScore ? current : max
+    );
+
+    return {
+      averageRisk: avgRisk,
+      maxRisk: maxRiskAssessment.riskScore,
+      dominantRiskType: maxRiskAssessment.riskType,
+      riskFactors: assessments.map(a => ({
+        type: a.riskType,
+        score: a.riskScore,
+        indicators: a.indicators
+      }))
+    };
+  }
+
+  private async checkAndTriggerAlerts(aggregatedRisk: AggregatedRisk, event: RiskEvent): Promise<void> {
+    if (aggregatedRisk.averageRisk < this.config.riskThreshold) {
+      return; // 未达到阈值
     }
+
+    const alertKey = \`\${aggregatedRisk.dominantRiskType}_\${event.address || event.contract}\`;
+
+    // 检查冷却时间
+    const existingAlert = this.activeAlerts.get(alertKey);
+    if (existingAlert && Date.now() - existingAlert.timestamp < this.config.alertCooldown * 1000) {
+      return; // 还在冷却期内
+    }
+
+    // 触发告警
+    const alert: RiskAlert = {
+      id: generateAlertId(),
+      type: aggregatedRisk.dominantRiskType,
+      severity: this.determineSeverity(aggregatedRisk.maxRisk),
+      message: this.generateAlertMessage(aggregatedRisk, event),
+      data: aggregatedRisk,
+      timestamp: Date.now(),
+      event: event
+    };
+
+    await this.sendAlert(alert);
+
+    // 记录活跃告警
+    this.activeAlerts.set(alertKey, {
+      alert,
+      timestamp: Date.now()
+    });
+  }
+
+  private determineSeverity(riskScore: number): 'low' | 'medium' | 'high' | 'critical' {
+    if (riskScore >= 0.9) return 'critical';
+    if (riskScore >= 0.7) return 'high';
+    if (riskScore >= 0.5) return 'medium';
+    return 'low';
   }
 }
 \`\`\`
 
-### 💰 投资回报分析
-| 年度 | 投入成本 | 拦截损失 | ROI |
-|------|----------|----------|-----|
-| 2022 | $50万 | $1200万 | 24:1 |
-| 2023 | $80万 | $2800万 | 35:1 |
-| 2024 | $120万 | $4200万 | 35:1 |
+---
 
-### 🔬 技术指标改进
-- **检测准确率**：从75%提升到92%
-- **平均响应时间**：从45分钟缩短到8分钟
-- **误报率**：从12%降低到3.2%
-- **系统可用性**：99.97%
+## 📊 风险指标效果评估
 
-### 🚀 未来展望
+### **检测效能指标**
+\`\`\`typescript
+interface DetectionMetrics {
+  // 检出率：实际风险事件 / 总风险事件
+  detectionRate: number;
+  // 误报率：误报告警 / 总告警
+  falsePositiveRate: number;
+  // 响应时间：告警触发到响应的平均时间
+  averageResponseTime: number;
+  // 拦截成功率：成功拦截的风险事件 / 检出的风险事件
+  interceptionRate: number;
+  // 业务影响：因风险控制减少的经济损失
+  lossPreventionValue: number;
+}
 
-基于这些成功案例，我们将继续：
-1. **AI增强**：引入机器学习算法提升检测精度
-2. **实时协作**：建立安全团队间的实时情报共享
-3. **生态共建**：与其他交易所和机构建立联合防御体系
-4. **技术创新**：探索区块链原生安全解决方案
+// 计算综合效能评分
+function calculateOverallEffectiveness(metrics: DetectionMetrics): number {
+  const weights = {
+    detectionRate: 0.3,
+    falsePositiveRate: -0.2, // 负权重，因为误报率越低越好
+    averageResponseTime: -0.2, // 负权重，因为响应时间越短越好
+    interceptionRate: 0.4,
+    lossPreventionValue: 0.3
+  };
+
+  // 归一化处理
+  const normalizedMetrics = {
+    detectionRate: Math.min(metrics.detectionRate, 1),
+    falsePositiveRate: Math.max(0, 1 - metrics.falsePositiveRate), // 反转：误报率低=评分高
+    averageResponseTime: Math.max(0, 1 - metrics.averageResponseTime / 3600000), // 1小时以内为满分
+    interceptionRate: Math.min(metrics.interceptionRate, 1),
+    lossPreventionValue: Math.min(metrics.lossPreventionValue / 10000000, 1) // 1kw人民币为满分
+  };
+
+  return Object.entries(weights).reduce((score, [key, weight]) => {
+    return score + normalizedMetrics[key as keyof typeof normalizedMetrics] * Math.abs(weight);
+  }, 0);
+}
+\`\`\`
+
+### **持续优化策略**
+1. **数据反馈循环**：收集真实的业务反馈数据
+2. **模型迭代更新**：基于新数据定期重新训练模型
+3. **阈值动态调整**：根据业务环境变化调整风险阈值
+4. **新风险类型识别**：持续发现和定义新的风险模式
+5. **跨平台协作**：与其他风控系统共享情报和经验
       `
     }
   };
@@ -1238,6 +1419,7 @@ class AutomatedDefenseSystem {
   const sections = [
     { id: 'overview', label: '平台概览', icon: BookOpen, difficulty: '入门' },
     { id: 'methodology', label: 'MECE方法论', icon: Target, difficulty: '进阶' },
+    { id: 'cryptoIndicators', label: '加密货币指标', icon: Zap, difficulty: '进阶' },
     { id: 'bestPractices', label: '最佳实践', icon: Star, difficulty: '专家' },
     { id: 'caseStudies', label: '案例分析', icon: TrendingUp, difficulty: '专家' }
   ];
@@ -1284,7 +1466,7 @@ class AutomatedDefenseSystem {
                   const isCompleted = completedTutorials.includes(section.id);
                   const tutorialData = tutorialContent[section.id as keyof typeof tutorialContent];
 
-                  return (
+    return (
                     <button
                       key={section.id}
                       onClick={() => setActiveSection(section.id)}
@@ -1328,7 +1510,7 @@ class AutomatedDefenseSystem {
                 </div>
               </div>
             </div>
-          </div>
+                </div>
 
           {/* 主要内容区域 */}
           <div className="lg:col-span-3">
@@ -1338,7 +1520,7 @@ class AutomatedDefenseSystem {
                   {React.createElement(tutorialContent[activeSection as keyof typeof tutorialContent].icon, {
                     className: "w-8 h-8 text-blue-500"
                   })}
-                  <div>
+                <div>
                     <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
                       {tutorialContent[activeSection as keyof typeof tutorialContent].title}
                     </h2>
@@ -1400,9 +1582,9 @@ class AutomatedDefenseSystem {
                 </ReactMarkdown>
               </div>
             </div>
-          </div>
+                </div>
+            </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };

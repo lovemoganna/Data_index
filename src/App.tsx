@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { Category, SubCategory, Indicator, Stats } from './types';
-import { dataService } from './services/dataService'; 
+import { dataService } from './services/dataService';
+import RiskScoringEngine from './services/riskEngine'; 
 import * as exportService from './utils/exportService';
 import { IndicatorForm } from './components/IndicatorForm';
 import { CategoryForm, SubCategoryForm } from './components/StructureForms';
@@ -9,6 +10,7 @@ import { TutorialView } from './components/TutorialView';
 import { ManagementPanel } from './components/ManagementPanel';
 import { DataAnalysisPanel } from './components/DataAnalysisPanel';
 import { RealtimeMonitor } from './components/RealtimeMonitor';
+import { AlertRulesEngine } from './components/AlertRulesEngine';
 import { 
   Search, Sun, Moon, 
   Activity, Users, TrendingUp, BarChart3, Layers, Link, Clock,
@@ -23,7 +25,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-  const [activeTab, setActiveTab] = useState<'monitor' | 'manage' | 'tutorial' | 'analytics' | 'realtime'>('monitor');
+  const [activeTab, setActiveTab] = useState<'monitor' | 'manage' | 'tutorial' | 'analytics' | 'realtime' | 'alerts'>('monitor');
   const [selectedCatId, setSelectedCatId] = useState<string>('A');
   const [selectedSubId, setSelectedSubId] = useState<string>('ALL');
 
@@ -185,8 +187,9 @@ function App() {
               { id: 'monitor', label: '生产看板', icon: Eye },
               { id: 'realtime', label: '实时监控', icon: Activity },
               { id: 'analytics', label: '数据分析', icon: BarChart3 },
+              { id: 'alerts', label: '告警规则', icon: Bell },
               { id: 'manage', label: '体系管理', icon: Cpu },
-              { id: 'tutorial', label: '设计指南', icon: BookOpen }
+              { id: 'tutorial', label: '学习中心', icon: BookOpen }
             ].map(tab => (
               <button 
                 key={tab.id}
@@ -358,6 +361,13 @@ function App() {
         {activeTab === 'realtime' && <RealtimeMonitor data={data} />}
 
         {activeTab === 'analytics' && <DataAnalysisPanel data={data} />}
+
+        {activeTab === 'alerts' && (
+          <AlertRulesEngine
+            data={data}
+            riskScore={(() => RiskScoringEngine.calculateRiskScore(data))()}
+          />
+        )}
 
         {activeTab === 'tutorial' && <TutorialView />}
       </main>
