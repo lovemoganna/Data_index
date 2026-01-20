@@ -19,6 +19,15 @@ export const TutorialView: React.FC = () => {
   const [difficultyFilter, setDifficultyFilter] = useState<'all' | '入门' | '进阶' | '专家'>('all');
   const [showQuiz, setShowQuiz] = useState<string | null>(null);
 
+  // 教程章节定义
+  const sections = [
+    { id: 'overview', label: '平台概览', icon: BookOpen, difficulty: '入门' },
+    { id: 'methodology', label: 'MECE方法论', icon: Target, difficulty: '进阶' },
+    { id: 'cryptoIndicators', label: '加密货币指标', icon: Zap, difficulty: '进阶' },
+    { id: 'bestPractices', label: '最佳实践', icon: Star, difficulty: '专家' },
+    { id: 'caseStudies', label: '案例分析', icon: TrendingUp, difficulty: '专家' }
+  ];
+
   useEffect(() => {
     localStorage.setItem('completed_tutorials', JSON.stringify(completedTutorials));
   }, [completedTutorials]);
@@ -1434,15 +1443,7 @@ function calculateOverallEffectiveness(metrics: DetectionMetrics): number {
 5. **跨平台协作**：与其他风控系统共享情报和经验
       `
     }
-  };
-
-  const sections = [
-    { id: 'overview', label: '平台概览', icon: BookOpen, difficulty: '入门' },
-    { id: 'methodology', label: 'MECE方法论', icon: Target, difficulty: '进阶' },
-    { id: 'cryptoIndicators', label: '加密货币指标', icon: Zap, difficulty: '进阶' },
-    { id: 'bestPractices', label: '最佳实践', icon: Star, difficulty: '专家' },
-    { id: 'caseStudies', label: '案例分析', icon: TrendingUp, difficulty: '专家' }
-  ];
+    };
 
     return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
