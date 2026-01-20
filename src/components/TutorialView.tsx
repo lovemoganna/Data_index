@@ -11,13 +11,33 @@ import {
 
 export const TutorialView: React.FC = () => {
   const [activeSection, setActiveSection] = useState('overview');
-  const [completedTutorials, setCompletedTutorials] = useState<string[]>([]);
+  const [completedTutorials, setCompletedTutorials] = useState<string[]>(() => {
+    const saved = localStorage.getItem('completed_tutorials');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [difficultyFilter, setDifficultyFilter] = useState<'all' | '入门' | '进阶' | '专家'>('all');
+  const [showQuiz, setShowQuiz] = useState<string | null>(null);
+
+  useEffect(() => {
+    localStorage.setItem('completed_tutorials', JSON.stringify(completedTutorials));
+  }, [completedTutorials]);
 
   const markCompleted = (tutorialId: string) => {
     if (!completedTutorials.includes(tutorialId)) {
       setCompletedTutorials([...completedTutorials, tutorialId]);
     }
   };
+
+  // 过滤和搜索教程
+  const filteredSections = sections.filter(section => {
+    const content = tutorialContent[section.id as keyof typeof tutorialContent];
+    const matchesSearch = !searchTerm ||
+      content.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      content.content.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesDifficulty = difficultyFilter === 'all' || content.difficulty === difficultyFilter;
+    return matchesSearch && matchesDifficulty;
+  });
 
   const tutorialContent = {
     overview: {
@@ -600,7 +620,7 @@ const calculateOverallScore = (kpi: RiskMonitoringKPI): number => {
     Math.max(0, 1 - kpi.system.responseTime / 300) * 0.2
   );
 
-  return (
+                return (
     detectionScore * weights.detection +
     businessScore * weights.business +
     systemScore * weights.system
@@ -1424,32 +1444,75 @@ function calculateOverallEffectiveness(metrics: DetectionMetrics): number {
     { id: 'caseStudies', label: '案例分析', icon: TrendingUp, difficulty: '专家' }
   ];
 
-  return (
+    return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
+        {/* 学习进度概览和搜索 */}
+        <div className="mb-8 bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+          <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">
-                🎓 学习中心
-              </h1>
-              <p className="text-xl text-slate-600 dark:text-slate-400 mb-4">
-                深度掌握 MECE 风险本体设计方法论，提升金融风控专业能力
-              </p>
-            </div>
-
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">🎓 学习中心</h1>
+              <p className="text-slate-600 dark:text-slate-400">深度掌握 MECE 风险本体设计方法论，提升金融风控专业能力</p>
+                </div>
             <div className="text-right">
-              <div className="text-sm text-slate-500 dark:text-slate-400 mb-2">
-                学习进度
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                {completedTutorials.length}/{sections.length}
               </div>
-              <div className="w-32 bg-slate-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+              <div className="text-sm text-slate-600 dark:text-slate-400">已完成教程</div>
+              <div className="w-32 bg-slate-200 dark:bg-slate-700 rounded-full h-2 mt-2">
                 <div
-                  className="bg-blue-500 h-2 rounded-full transition-all"
+                  className="bg-blue-500 h-2 rounded-full transition-all duration-500"
                   style={{ width: `${(completedTutorials.length / sections.length) * 100}%` }}
                 ></div>
               </div>
-              <div className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                {completedTutorials.length} / {sections.length} 已完成
+            </div>
+          </div>
+
+          {/* 搜索和过滤 */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="搜索教程内容..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            <select
+              value={difficultyFilter}
+              onChange={(e) => setDifficultyFilter(e.target.value as any)}
+              className="px-4 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="all">全部难度</option>
+              <option value="入门">入门</option>
+              <option value="进阶">进阶</option>
+              <option value="专家">专家</option>
+            </select>
+          </div>
+
+          {/* 学习目标 */}
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <Target className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                <div>
+                <div className="font-semibold text-slate-900 dark:text-white">掌握MECE原则</div>
+                <div className="text-sm text-slate-600 dark:text-slate-400">学习系统化思维方法</div>
+                </div>
+            </div>
+            <div className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+              <Code className="w-8 h-8 text-green-600 dark:text-green-400" />
+              <div>
+                <div className="font-semibold text-slate-900 dark:text-white">精通指标计算</div>
+                <div className="text-sm text-slate-600 dark:text-slate-400">理解量化评估逻辑</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+              <Lightbulb className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+              <div>
+                <div className="font-semibold text-slate-900 dark:text-white">提升风控能力</div>
+                <div className="text-sm text-slate-600 dark:text-slate-400">建立专业风险思维</div>
               </div>
             </div>
           </div>
@@ -1461,7 +1524,7 @@ function calculateOverallEffectiveness(metrics: DetectionMetrics): number {
             <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-4">
               <h3 className="font-semibold text-slate-900 dark:text-white mb-4">学习目录</h3>
               <nav className="space-y-2">
-                {sections.map((section) => {
+                {filteredSections.map((section) => {
                   const Icon = section.icon;
                   const isCompleted = completedTutorials.includes(section.id);
                   const tutorialData = tutorialContent[section.id as keyof typeof tutorialContent];
@@ -1582,8 +1645,80 @@ function calculateOverallEffectiveness(metrics: DetectionMetrics): number {
                 </ReactMarkdown>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* 学习成就和下一步建议 */}
+        {completedTutorials.length > 0 && (
+          <div className="mt-8 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-blue-500 rounded-full">
+                <Award className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                  🎉 学习成就
+                </h3>
+                <p className="text-slate-700 dark:text-slate-300 mb-4">
+                  恭喜你已完成 {completedTutorials.length} 个教程！继续努力，成为MECE风险监控领域的专家。
+                </p>
+
+                {/* 成就徽章 */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {completedTutorials.length >= 1 && (
+                    <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
+                      🚀 初学者
+                    </span>
+                  )}
+                  {completedTutorials.length >= 3 && (
+                    <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-sm font-medium">
+                      📚 学者
+                    </span>
+                  )}
+                  {completedTutorials.length >= 5 && (
+                    <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm font-medium">
+                      🎯 专家
+                    </span>
+                  )}
+                  {completedTutorials.length === sections.length && (
+                    <span className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 rounded-full text-sm font-medium">
+                      🏆 大师
+                    </span>
+                  )}
                 </div>
+
+                {/* 下一步建议 */}
+                {completedTutorials.length < sections.length && (
+                  <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+                    <h4 className="font-semibold text-slate-900 dark:text-white mb-2">📈 建议继续学习</h4>
+                    <div className="space-y-2">
+                      {sections
+                        .filter(section => !completedTutorials.includes(section.id))
+                        .slice(0, 3)
+                        .map(section => (
+                          <div key={section.id} className="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-700 rounded">
+                            <div className="flex items-center gap-2">
+                              <section.icon className="w-4 h-4 text-slate-500" />
+                              <span className="text-sm font-medium">{section.label}</span>
+                              <span className="text-xs px-2 py-1 bg-slate-200 dark:bg-slate-600 rounded">
+                                {tutorialContent[section.id as keyof typeof tutorialContent]?.difficulty}
+                              </span>
+                            </div>
+                            <button
+                              onClick={() => setActiveSection(section.id)}
+                              className="text-xs px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                            >
+                              开始学习
+                            </button>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
+          </div>
+        )}
             </div>
         </div>
     );

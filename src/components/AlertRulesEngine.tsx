@@ -546,17 +546,447 @@ export function AlertRulesEngine({ data, riskScore }: AlertRulesEngineProps) {
             </div>
 
             <div className="p-6">
-              {/* 这里可以添加完整的规则创建/编辑表单 */}
-              <div className="text-center py-8">
-                <Settings className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-                <p className="text-slate-600 dark:text-slate-400">
-                  规则创建表单开发中，敬请期待...
-                </p>
-              </div>
+              <RuleForm
+                rule={editingRule}
+                data={data}
+                onSave={(ruleData) => {
+                  if (editingRule) {
+                    // 编辑现有规则
+                    setRules(prev => prev.map(r => r.id === editingRule.id ? ruleData : r));
+                  } else {
+                    // 创建新规则
+                    setRules(prev => [...prev, ruleData]);
+                  }
+                  setShowCreateForm(false);
+                  setEditingRule(null);
+                }}
+                onCancel={() => {
+                  setShowCreateForm(false);
+                  setEditingRule(null);
+                }}
+              />
             </div>
           </div>
         </div>
       )}
     </div>
+  );
+}
+
+// 规则创建/编辑表单组件
+interface RuleFormProps {
+  rule: AlertRule | null;
+  data: Category[];
+  onSave: (rule: AlertRule) => void;
+  onCancel: () => void;
+}
+
+function RuleForm({ rule, data, onSave, onCancel }: RuleFormProps) {
+  const [formData, setFormData] = useState<Partial<AlertRule>>(rule || {
+    name: '',
+    description: '',
+    enabled: true,
+    conditions: [{ id: 'cond_1', type: 'risk_score', operator: 'gte', value: 70 }],
+    actions: [{ id: 'action_1', type: 'internal_alert', config: { title: '风险告警', message: '检测到高风险情况' }, enabled: true }],
+    priority: 'medium',
+    cooldownMinutes: 30,
+    triggerCount: 0
+  });
+
+  const addCondition = () => {
+    const newCondition: AlertCondition = {
+      id: `cond_${Date.now()}`,
+      type: 'risk_score',
+      operator: 'gte',
+      value: 50
+    };
+    setFormData(prev => ({
+      ...prev,
+      conditions: [...(prev.conditions || []), newCondition]
+    }));
+  };
+
+  const updateCondition = (index: number, updates: Partial<AlertCondition>) => {
+    setFormData(prev => ({
+      ...prev,
+      conditions: prev.conditions?.map((cond, i) =>
+        i === index ? { ...cond, ...updates } : cond
+      )
+    }));
+  };
+
+  const removeCondition = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      conditions: prev.conditions?.filter((_, i) => i !== index)
+    }));
+  };
+
+  const addAction = () => {
+    const newAction: AlertAction = {
+      id: `action_${Date.now()}`,
+      type: 'internal_alert',
+      config: { title: '风险告警', message: '检测到风险情况' },
+      enabled: true
+    };
+    setFormData(prev => ({
+      ...prev,
+      actions: [...(prev.actions || []), newAction]
+    }));
+  };
+
+  const updateAction = (index: number, updates: Partial<AlertAction>) => {
+    setFormData(prev => ({
+      ...prev,
+      actions: prev.actions?.map((action, i) =>
+        i === index ? { ...action, ...updates } : action
+      )
+    }));
+  };
+
+  const removeAction = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      actions: prev.actions?.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.description) return;
+
+    const ruleData: AlertRule = {
+      id: rule?.id || `rule_${Date.now()}`,
+      name: formData.name!,
+      description: formData.description!,
+      enabled: formData.enabled || false,
+      conditions: formData.conditions || [],
+      actions: formData.actions || [],
+      priority: formData.priority || 'medium',
+      cooldownMinutes: formData.cooldownMinutes || 30,
+      triggerCount: rule?.triggerCount || 0,
+      lastTriggered: rule?.lastTriggered
+    };
+
+    onSave(ruleData);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {/* 基本信息 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            规则名称 *
+          </label>
+          <input
+            type="text"
+            value={formData.name || ''}
+            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+            className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
+            placeholder="输入规则名称"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            优先级
+          </label>
+          <select
+            value={formData.priority || 'medium'}
+            onChange={(e) => setFormData(prev => ({ ...prev, priority: e.target.value as AlertRule['priority'] }))}
+            className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
+          >
+            <option value="low">低</option>
+            <option value="medium">中</option>
+            <option value="high">高</option>
+            <option value="critical">紧急</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+          规则描述 *
+        </label>
+        <textarea
+          value={formData.description || ''}
+          onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+          className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
+          placeholder="描述此规则的触发条件和作用"
+          rows={3}
+          required
+        />
+      </div>
+
+      <div className="flex items-center gap-4">
+        <label className="flex items-center">
+          <input
+            type="checkbox"
+            checked={formData.enabled || false}
+            onChange={(e) => setFormData(prev => ({ ...prev, enabled: e.target.checked }))}
+            className="mr-2"
+          />
+          <span className="text-sm text-slate-700 dark:text-slate-300">启用规则</span>
+        </label>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            冷却时间（分钟）
+          </label>
+          <input
+            type="number"
+            value={formData.cooldownMinutes || 30}
+            onChange={(e) => setFormData(prev => ({ ...prev, cooldownMinutes: parseInt(e.target.value) }))}
+            className="w-20 px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
+            min="1"
+            max="1440"
+          />
+        </div>
+      </div>
+
+      {/* 触发条件 */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="text-lg font-semibold text-slate-900 dark:text-white">触发条件</h4>
+          <button
+            type="button"
+            onClick={addCondition}
+            className="flex items-center gap-2 px-3 py-1 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600"
+          >
+            <Plus size={14} />
+            添加条件
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          {formData.conditions?.map((condition, index) => (
+            <div key={condition.id} className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
+              <select
+                value={condition.type}
+                onChange={(e) => updateCondition(index, { type: e.target.value as AlertCondition['type'] })}
+                className="px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 text-sm"
+              >
+                <option value="risk_score">综合风险评分</option>
+                <option value="category_score">类别风险评分</option>
+                <option value="indicator_value">指标风险评分</option>
+                <option value="trend_change">趋势变化</option>
+              </select>
+
+              <select
+                value={condition.operator}
+                onChange={(e) => updateCondition(index, { operator: e.target.value as AlertCondition['operator'] })}
+                className="px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 text-sm"
+              >
+                <option value="gt">大于 (&gt;)</option>
+                <option value="gte">大于等于 (≥)</option>
+                <option value="lt">小于 (&lt;)</option>
+                <option value="lte">小于等于 (≤)</option>
+                <option value="eq">等于 (=)</option>
+                <option value="neq">不等于 (≠)</option>
+              </select>
+
+              <input
+                type="number"
+                value={condition.value}
+                onChange={(e) => updateCondition(index, { value: parseFloat(e.target.value) })}
+                className="w-24 px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 text-sm"
+                step="0.1"
+              />
+
+              {(condition.type === 'category_score' || condition.type === 'indicator_value') && (
+                <select
+                  value={condition.target || ''}
+                  onChange={(e) => updateCondition(index, { target: e.target.value })}
+                  className="px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 text-sm"
+                >
+                  <option value="">选择目标...</option>
+                  {condition.type === 'category_score' && data.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                  {condition.type === 'indicator_value' && data.flatMap(cat =>
+                    cat.subcategories.flatMap(sub => sub.indicators)
+                  ).map(ind => (
+                    <option key={ind.id} value={ind.id}>{ind.name}</option>
+                  ))}
+                </select>
+              )}
+
+              <button
+                type="button"
+                onClick={() => removeCondition(index)}
+                className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 执行动作 */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="text-lg font-semibold text-slate-900 dark:text-white">执行动作</h4>
+          <button
+            type="button"
+            onClick={addAction}
+            className="flex items-center gap-2 px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600"
+          >
+            <Plus size={14} />
+            添加动作
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          {formData.actions?.map((action, index) => (
+            <div key={action.id} className="p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
+              <div className="flex items-center gap-3 mb-3">
+                <select
+                  value={action.type}
+                  onChange={(e) => updateAction(index, { type: e.target.value as AlertAction['type'] })}
+                  className="px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 text-sm"
+                >
+                  <option value="internal_alert">内部告警</option>
+                  <option value="email">邮件通知</option>
+                  <option value="webhook">Webhook</option>
+                  <option value="sms">短信通知</option>
+                  <option value="slack">Slack消息</option>
+                </select>
+
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={action.enabled}
+                    onChange={(e) => updateAction(index, { enabled: e.target.checked })}
+                    className="mr-2"
+                  />
+                  <span className="text-sm text-slate-700 dark:text-slate-300">启用</span>
+                </label>
+
+                <button
+                  type="button"
+                  onClick={() => removeAction(index)}
+                  className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg ml-auto"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+
+              {/* 动作配置 */}
+              <div className="space-y-2">
+                {action.type === 'internal_alert' && (
+                  <>
+                    <input
+                      type="text"
+                      placeholder="告警标题"
+                      value={action.config.title || ''}
+                      onChange={(e) => updateAction(index, {
+                        config: { ...action.config, title: e.target.value }
+                      })}
+                      className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 text-sm"
+                    />
+                    <textarea
+                      placeholder="告警消息内容"
+                      value={action.config.message || ''}
+                      onChange={(e) => updateAction(index, {
+                        config: { ...action.config, message: e.target.value }
+                      })}
+                      className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 text-sm"
+                      rows={2}
+                    />
+                  </>
+                )}
+
+                {action.type === 'email' && (
+                  <>
+                    <input
+                      type="email"
+                      placeholder="收件人邮箱"
+                      value={action.config.to || ''}
+                      onChange={(e) => updateAction(index, {
+                        config: { ...action.config, to: e.target.value }
+                      })}
+                      className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 text-sm"
+                    />
+                    <input
+                      type="text"
+                      placeholder="邮件主题"
+                      value={action.config.subject || ''}
+                      onChange={(e) => updateAction(index, {
+                        config: { ...action.config, subject: e.target.value }
+                      })}
+                      className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 text-sm"
+                    />
+                  </>
+                )}
+
+                {action.type === 'webhook' && (
+                  <>
+                    <input
+                      type="url"
+                      placeholder="Webhook URL"
+                      value={action.config.url || ''}
+                      onChange={(e) => updateAction(index, {
+                        config: { ...action.config, url: e.target.value }
+                      })}
+                      className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 text-sm"
+                    />
+                    <input
+                      type="text"
+                      placeholder="消息内容"
+                      value={action.config.message || ''}
+                      onChange={(e) => updateAction(index, {
+                        config: { ...action.config, message: e.target.value }
+                      })}
+                      className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 text-sm"
+                    />
+                  </>
+                )}
+
+                {action.type === 'slack' && (
+                  <>
+                    <input
+                      type="url"
+                      placeholder="Slack Webhook URL"
+                      value={action.config.webhookUrl || ''}
+                      onChange={(e) => updateAction(index, {
+                        config: { ...action.config, webhookUrl: e.target.value }
+                      })}
+                      className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 text-sm"
+                    />
+                    <textarea
+                      placeholder="Slack消息内容"
+                      value={action.config.message || ''}
+                      onChange={(e) => updateAction(index, {
+                        config: { ...action.config, message: e.target.value }
+                      })}
+                      className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-slate-900 dark:text-slate-100 text-sm"
+                      rows={2}
+                    />
+                  </>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 操作按钮 */}
+      <div className="flex justify-end gap-3 pt-6 border-t border-slate-200 dark:border-slate-700">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="px-6 py-2 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700"
+        >
+          取消
+        </button>
+        <button
+          type="submit"
+          className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
+        >
+          {rule ? '更新规则' : '创建规则'}
+        </button>
+      </div>
+    </form>
   );
 }
