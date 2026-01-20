@@ -6,7 +6,7 @@ import {
   BookOpen, Target, Shield, Activity, Layers, AlertTriangle, BarChart3,
   Database, Users, Zap, ChevronRight, Play, CheckCircle, Star,
   Code, Lightbulb, TrendingUp, Eye, Cpu, FileText, Video,
-  GraduationCap, Award, Clock, ArrowRight
+  GraduationCap, Award, Clock, ArrowRight, Search
 } from 'lucide-react';
 
 export const TutorialView: React.FC = () => {
