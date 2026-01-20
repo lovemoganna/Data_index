@@ -7,6 +7,7 @@ import { IndicatorForm } from './components/IndicatorForm';
 import { CategoryForm, SubCategoryForm } from './components/StructureForms';
 import { TutorialView } from './components/TutorialView';
 import { ManagementPanel } from './components/ManagementPanel';
+import { DataAnalysisPanel } from './components/DataAnalysisPanel';
 import { 
   Search, Sun, Moon, 
   Activity, Users, TrendingUp, BarChart3, Layers, Link, Clock,
@@ -20,7 +21,7 @@ function App() {
   const [data, setData] = useState<Category[]>(() => dataService.getAll());
   const [darkMode, setDarkMode] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
   
-  const [activeTab, setActiveTab] = useState<'monitor' | 'manage' | 'tutorial'>('monitor');
+  const [activeTab, setActiveTab] = useState<'monitor' | 'manage' | 'tutorial' | 'analytics'>('monitor');
   const [selectedCatId, setSelectedCatId] = useState<string>('A'); 
   const [selectedSubId, setSelectedSubId] = useState<string>('ALL');
 
@@ -116,6 +117,7 @@ function App() {
             {[
               { id: 'monitor', label: '生产看板', icon: Eye },
               { id: 'manage', label: '体系管理', icon: Cpu },
+              { id: 'analytics', label: '数据分析', icon: BarChart3 },
               { id: 'tutorial', label: '设计指南', icon: BookOpen }
             ].map(tab => (
               <button 
@@ -284,6 +286,8 @@ function App() {
             onImport={handleImport}
           />
         )}
+
+        {activeTab === 'analytics' && <DataAnalysisPanel data={data} />}
 
         {activeTab === 'tutorial' && <TutorialView />}
       </main>
