@@ -15,7 +15,8 @@ import {
   Search, Sun, Moon,
   Activity, Users, TrendingUp, BarChart3, Layers, Link, Clock,
   FileSpreadsheet, Shield, AlertTriangle, Eye, Cpu, BookOpen,
-  Maximize2, Minimize2, ChevronRight, Hash, Filter, LayoutGrid, Bell
+  Maximize2, Minimize2, ChevronRight, Hash, Filter, LayoutGrid, Bell,
+  Download, ChevronDown
 } from 'lucide-react';
 
 const iconMap: any = { Users, TrendingUp, Activity, BarChart3, Layers, Link, Clock, Shield, AlertTriangle };
@@ -31,6 +32,19 @@ function App() {
 
   const [search, setSearch] = useState('');
   const [isCompact, setIsCompact] = useState(false);
+  const [showExportMenu, setShowExportMenu] = useState(false);
+
+  // 点击外部关闭导出菜单
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showExportMenu && !(event.target as Element).closest('.export-menu-container')) {
+        setShowExportMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showExportMenu]);
 
   const [isIndModalOpen, setIsIndModalOpen] = useState(false);
   const [isCatModalOpen, setIsCatModalOpen] = useState(false);
@@ -286,9 +300,69 @@ function App() {
                     <button onClick={() => setIsCompact(!isCompact)} className="p-2 bg-slate-50 dark:bg-slate-800 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">
                         {isCompact ? <Minimize2 size={16}/> : <Maximize2 size={16}/>}
                     </button>
-                    <button onClick={() => exportService.exportToCSV(data)} className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-[11px] font-black rounded-xl shadow-lg shadow-green-600/20 transition-all">
-                        <FileSpreadsheet size={14} /> 导出体系报告 (XLS)
-                    </button>
+
+                    {/* 导出按钮组 */}
+                    <div className="relative export-menu-container">
+                        <button
+                            onClick={() => setShowExportMenu(!showExportMenu)}
+                            className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-[11px] font-black rounded-xl shadow-lg shadow-green-600/20 transition-all"
+                        >
+                            <Download size={14} />
+                            导出报告
+                            <ChevronDown size={12} className={`transition-transform ${showExportMenu ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {/* 导出格式菜单 */}
+                        {showExportMenu && (
+                            <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 z-50 overflow-hidden">
+                                <div className="py-2">
+                                    <button
+                                        onClick={() => {
+                                            exportService.exportToExcel(data);
+                                            setShowExportMenu(false);
+                                        }}
+                                        className="w-full flex items-center gap-3 px-4 py-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-700 transition-all"
+                                    >
+                                        <FileSpreadsheet size={14} className="text-green-600" />
+                                        Excel (.xlsx)
+                                    </button>
+
+                                    <button
+                                        onClick={() => {
+                                            exportService.exportToCSV(data);
+                                            setShowExportMenu(false);
+                                        }}
+                                        className="w-full flex items-center gap-3 px-4 py-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-700 transition-all"
+                                    >
+                                        <FileSpreadsheet size={14} className="text-blue-600" />
+                                        CSV (.csv)
+                                    </button>
+
+                                    <button
+                                        onClick={() => {
+                                            exportService.exportToJSON(data);
+                                            setShowExportMenu(false);
+                                        }}
+                                        className="w-full flex items-center gap-3 px-4 py-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-700 transition-all"
+                                    >
+                                        <FileSpreadsheet size={14} className="text-purple-600" />
+                                        JSON (.json)
+                                    </button>
+
+                                    <button
+                                        onClick={() => {
+                                            exportService.exportToMarkdown(data);
+                                            setShowExportMenu(false);
+                                        }}
+                                        className="w-full flex items-center gap-3 px-4 py-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-orange-50 dark:hover:bg-orange-900/20 hover:text-orange-700 transition-all"
+                                    >
+                                        <FileSpreadsheet size={14} className="text-orange-600" />
+                                        Markdown (.md)
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
