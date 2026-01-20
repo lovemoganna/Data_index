@@ -38,16 +38,7 @@ export const TutorialView: React.FC = () => {
     }
   };
 
-  // 过滤和搜索教程
-  const filteredSections = sections.filter(section => {
-    const content = tutorialContent[section.id as keyof typeof tutorialContent];
-    const matchesSearch = !searchTerm ||
-      content.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      content.content.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDifficulty = difficultyFilter === 'all' || content.difficulty === difficultyFilter;
-    return matchesSearch && matchesDifficulty;
-  });
-
+  // 教程内容定义
   const tutorialContent = {
     overview: {
       title: '平台概览',
@@ -1444,6 +1435,16 @@ function calculateOverallEffectiveness(metrics: DetectionMetrics): number {
       `
     }
     };
+
+    // 过滤和搜索教程
+    const filteredSections = sections.filter(section => {
+      const content = tutorialContent[section.id as keyof typeof tutorialContent];
+      const matchesSearch = !searchTerm ||
+        content.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        content.content.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesDifficulty = difficultyFilter === 'all' || content.difficulty === difficultyFilter;
+      return matchesSearch && matchesDifficulty;
+    });
 
     return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
