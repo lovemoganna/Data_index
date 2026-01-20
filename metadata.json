@@ -1,0 +1,5 @@
+{
+  "name": "Crypto Spot Risk Ontology Platform",
+  "description": "基于 MECE 原则的加密货币现货交易监控本体平台，提供高密度 Excel 看板、AML资金流转及交易操纵行为深度建模。",
+  "requestFramePermissions": []
+}
