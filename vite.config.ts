@@ -6,6 +6,11 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
       base: mode === 'production' ? '/data_index/' : '/',
+      build: {
+        rollupOptions: {
+          input: './index.html'
+        }
+      },
       server: {
         port: 3000,
         host: '0.0.0.0',
