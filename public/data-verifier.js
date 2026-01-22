@@ -18,6 +18,16 @@ window.verifyDataIntegrity = async function() {
       return;
     }
 
+    // 检查存储权限
+    if ('storage' in navigator && 'estimate' in navigator.storage) {
+      try {
+        const estimate = await navigator.storage.estimate();
+        console.log(`   存储使用情况: ${(estimate.usage / estimate.quota * 100).toFixed(1)}% (${(estimate.usage / 1024 / 1024).toFixed(1)}MB / ${(estimate.quota / 1024 / 1024).toFixed(1)}MB)`);
+      } catch (e) {
+        console.log('   ⚠️ 无法获取存储使用情况');
+      }
+    }
+
     const dbRequest = window.indexedDB.open('MECERiskOntologyDB', 1);
     dbRequest.onsuccess = function(event) {
       const db = event.target.result;
@@ -120,8 +130,14 @@ window.verifyDataIntegrity = async function() {
       }
     };
 
-    dbRequest.onerror = function() {
+    dbRequest.onerror = function(event) {
       console.log('   ❌ 无法打开IndexedDB数据库');
+      console.log('   错误详情:', event.target.error);
+      console.log('   可能的原因:');
+      console.log('   • 浏览器隐私模式');
+      console.log('   • 存储空间不足');
+      console.log('   • 安全策略阻止');
+      console.log('   • 浏览器不支持IndexedDB');
     };
 
     // 3. 检查内存中的数据

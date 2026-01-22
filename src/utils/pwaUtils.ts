@@ -45,9 +45,9 @@ class PWAUtils {
       logger.info('Registering Service Worker...');
 
       // 对于GitHub Pages，使用相对路径
-      const basePath = import.meta.env.PROD ? '/Data_index' : '';
-      const registration = await navigator.serviceWorker.register(`${basePath}/sw.js`, {
-        scope: basePath || '/'
+      const basePath = import.meta.env.PROD ? '/Data_index/' : '/';
+      const registration = await navigator.serviceWorker.register(`${basePath}sw.js`, {
+        scope: basePath
       });
 
       this.registration = registration;
