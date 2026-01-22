@@ -150,6 +150,19 @@ function App() {
     return s;
   }, [data]);
 
+  // 创建指标ID到名称的映射，用于显示引用
+  const indicatorNameMap = useMemo(() => {
+    const map = new Map<string, string>();
+    data.forEach(cat =>
+      cat.subcategories.forEach(sub =>
+        sub.indicators.forEach(ind =>
+          map.set(ind.id, ind.name)
+        )
+      )
+    );
+    return map;
+  }, [data]);
+
   const filteredIndicators = useMemo(() => {
     const list: any[] = [];
     data.forEach(cat => {
@@ -162,14 +175,17 @@ function App() {
               ind.id.includes(search) ||
               ind.definition.includes(search) ||
               ind.purpose.includes(search) ||
-              (ind.usages && ind.usages.some(usage => usage.includes(search)))) {
+              (ind.references && ind.references.some(ref =>
+                indicatorNameMap.get(ref.targetId)?.includes(search) ||
+                ref.description?.includes(search)
+              ))) {
             list.push({ cat, sub, ind });
           }
         });
       });
     });
     return list;
-  }, [data, search, selectedCatId, selectedSubId]);
+  }, [data, search, selectedCatId, selectedSubId, indicatorNameMap]);
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
@@ -247,7 +263,7 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
   };
 
   // 处理双向链接点击
-  const handleUsageClick = (usage: string) => {
+  const handleReferenceClick = (targetId: string) => {
     // 保存当前导航状态到历史记录
     setNavigationHistory(prev => [...prev, {
       catId: selectedCatId,
@@ -256,17 +272,17 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
     }]);
     setCanGoBack(true);
 
-    // 查找是否是指标名称
+    // 查找目标指标
     const foundIndicator = data.flatMap(cat =>
       cat.subcategories.flatMap(sub =>
-        sub.indicators.find(ind =>
-          ind.name === usage || ind.id === usage
-        ) ? { cat, sub, ind: sub.indicators.find(ind => ind.name === usage || ind.id === usage)! } : []
+        sub.indicators.find(ind => ind.id === targetId)
+          ? { cat, sub, ind: sub.indicators.find(ind => ind.id === targetId)! }
+          : []
       )
     ).find(item => item);
 
     if (foundIndicator) {
-      // 如果是指标名称，跳转到该指标
+      // 跳转到目标指标
       setSelectedCatId(foundIndicator.cat.id);
       setSelectedSubId(foundIndicator.sub.id);
       setLinkedIndicatorId(foundIndicator.ind.id);
@@ -277,10 +293,7 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
       // 短暂高亮效果
       setTimeout(() => setLinkedIndicatorId(null), 3000);
     } else {
-      // 如果不是指标名称，按使用场景搜索
-      setSearch(usage);
-      setSelectedCatId('ALL');
-      setSelectedSubId('ALL');
+      console.warn(`Referenced indicator ${targetId} not found`);
     }
   };
 
@@ -621,20 +634,23 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                         <span className="font-bold text-indigo-600 dark:text-indigo-400">公式：</span>
                         <span className="font-mono text-slate-700 dark:text-slate-300">{ind.formula}</span>
                       </div>
-                      {ind.usages && ind.usages.length > 0 && (
+                      {ind.references && ind.references.length > 0 && (
                         <div>
-                          <span className="font-bold text-cyan-600 dark:text-cyan-400">调用方：</span>
+                          <span className="font-bold text-cyan-600 dark:text-cyan-400">双向链接：</span>
                           <div className="flex flex-wrap gap-1 mt-1">
-                            {ind.usages.map((usage, i) => (
-                              <button
-                                key={i}
-                                onClick={() => handleUsageClick(usage)}
-                                className={`inline-block px-1.5 py-0.5 bg-cyan-100 dark:bg-cyan-900/40 hover:bg-cyan-200 dark:hover:bg-cyan-800/60 text-cyan-700 dark:text-cyan-300 rounded text-[9px] font-bold transition-all cursor-pointer hover:shadow-sm active:scale-95 ${linkedIndicatorId === ind.id ? 'ring-2 ring-cyan-400' : ''}`}
-                                title={`点击跳转: ${usage}`}
-                              >
-                                🔗 {usage}
-                              </button>
-                            ))}
+                            {ind.references.map((ref, i) => {
+                              const targetName = indicatorNameMap.get(ref.targetId) || ref.targetId;
+                              return (
+                                <button
+                                  key={i}
+                                  onClick={() => handleReferenceClick(ref.targetId)}
+                                  className={`inline-block px-1.5 py-0.5 bg-cyan-100 dark:bg-cyan-900/40 hover:bg-cyan-200 dark:hover:bg-cyan-800/60 text-cyan-700 dark:text-cyan-300 rounded text-[9px] font-bold transition-all cursor-pointer hover:shadow-sm active:scale-95 ${linkedIndicatorId === ind.id ? 'ring-2 ring-cyan-400' : ''}`}
+                                  title={`点击跳转到指标: ${targetName}`}
+                                >
+                                  🔗 {targetName}
+                                </button>
+                              );
+                            })}
                           </div>
                         </div>
                       )}
@@ -698,26 +714,29 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                                 <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 text-[10px] md:text-[11px] font-black text-orange-600 dark:text-orange-400">{ind.threshold}</td>
                                 <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 text-[10px] md:text-[11px] text-green-600 dark:text-green-500 font-medium">{ind.calculationCase}</td>
                                 <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 text-[10px] md:text-[11px] text-cyan-600 dark:text-cyan-400 font-medium bg-cyan-50/10 dark:bg-transparent hidden xl:table-cell">
-                                    {ind.usages && ind.usages.length > 0 ? (
+                                    {ind.references && ind.references.length > 0 ? (
                                         <div className="flex flex-wrap gap-1 max-w-[300px]">
-                                            {ind.usages.slice(0, 3).map((usage, i) => (
-                                                <button
-                                                    key={i}
-                                                    onClick={() => handleUsageClick(usage)}
-                                                    className={`inline-block px-1.5 py-0.5 bg-cyan-100 dark:bg-cyan-900/40 hover:bg-cyan-200 dark:hover:bg-cyan-800/60 text-cyan-700 dark:text-cyan-300 rounded text-[8px] md:text-[9px] font-bold truncate max-w-[80px] transition-all cursor-pointer hover:shadow-sm active:scale-95 ${linkedIndicatorId === ind.id ? 'ring-2 ring-cyan-400' : ''}`}
-                                                    title={`点击跳转: ${usage}`}
-                                                >
-                                                    🔗 {usage}
-                                                </button>
-                                            ))}
-                                            {ind.usages.length > 3 && (
+                                            {ind.references.slice(0, 3).map((ref, i) => {
+                                                const targetName = indicatorNameMap.get(ref.targetId) || ref.targetId;
+                                                return (
+                                                    <button
+                                                        key={i}
+                                                        onClick={() => handleReferenceClick(ref.targetId)}
+                                                        className={`inline-block px-1.5 py-0.5 bg-cyan-100 dark:bg-cyan-900/40 hover:bg-cyan-200 dark:hover:bg-cyan-800/60 text-cyan-700 dark:text-cyan-300 rounded text-[8px] md:text-[9px] font-bold truncate max-w-[80px] transition-all cursor-pointer hover:shadow-sm active:scale-95 ${linkedIndicatorId === ind.id ? 'ring-2 ring-cyan-400' : ''}`}
+                                                        title={`点击跳转到指标: ${targetName}`}
+                                                    >
+                                                        🔗 {targetName}
+                                                    </button>
+                                                );
+                                            })}
+                                            {ind.references.length > 3 && (
                                                 <span className="inline-block px-1.5 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 rounded text-[8px] md:text-[9px] font-bold">
-                                                    +{ind.usages.length - 3}
+                                                    +{ind.references.length - 3}
                                                 </span>
                                             )}
                                         </div>
                                     ) : (
-                                        <span className="text-slate-400 text-[9px] md:text-[10px]">暂无调用</span>
+                                        <span className="text-slate-400 text-[9px] md:text-[10px]">暂无引用</span>
                                     )}
                                 </td>
                                 <td className="px-2 py-2 text-[10px] md:text-[11px] text-red-800 dark:text-red-300 font-medium leading-relaxed bg-red-50/5 dark:bg-transparent">{ind.riskInterpretation}</td>

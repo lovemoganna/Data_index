@@ -24,7 +24,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "A1-02",
@@ -38,7 +41,12 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["身份验证模块", "风险评估引擎", "合规审查系统", "账龄"]
+            "references": [
+                {"targetId": "身份验证模块", "type": "used_by", "description": "身份验证模块使用此指标"},
+                {"targetId": "风险评估引擎", "type": "used_by", "description": "风险评估引擎使用此指标"},
+                {"targetId": "合规审查系统", "type": "used_by", "description": "合规审查系统使用此指标"},
+                {"targetId": "账龄", "type": "depends_on", "description": "依赖账龄指标进行计算"}
+            ]
           },
           {
             "id": "A1-03",
@@ -70,7 +78,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "A2-02",
@@ -84,7 +95,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "A2-03",
@@ -98,7 +112,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "A2-04",
@@ -112,7 +129,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "A2-05",
@@ -186,7 +206,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "A4-02",
@@ -200,7 +223,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "A4-03",
@@ -214,7 +240,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "A4-04",
@@ -246,7 +275,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "A5-02",
@@ -260,7 +292,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "A5-03",
@@ -274,7 +309,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "A5-04",
@@ -288,7 +326,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "A5-05",
@@ -365,7 +406,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "B1-05",
@@ -433,7 +477,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "B2-05",
@@ -465,7 +512,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "B3-02",
@@ -479,7 +529,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "B3-03",
@@ -493,7 +546,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "B3-04",
@@ -561,7 +617,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "B4-03",
@@ -605,7 +664,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "B5-02",
@@ -619,7 +681,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "B5-03",
@@ -696,7 +761,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "C1-04",
@@ -728,7 +796,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "C2-02",
@@ -742,7 +813,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "C2-03",
@@ -756,7 +830,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "C2-04",
@@ -812,7 +889,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "C3-04",
@@ -850,7 +930,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "C3-07",
@@ -894,7 +977,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "C4-02",
@@ -908,7 +994,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "C4-03",
@@ -940,7 +1029,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "C5-02",
@@ -954,7 +1046,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "C5-03",
@@ -1010,7 +1105,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "C6-02",
@@ -1036,7 +1134,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "C6-04",
@@ -1050,7 +1151,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "C6-05",
@@ -1091,7 +1195,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "D1-02",
@@ -1105,7 +1212,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "D1-03",
@@ -1137,7 +1247,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "D2-02",
@@ -1151,7 +1264,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "D2-03",
@@ -1183,7 +1299,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "D3-02",
@@ -1197,7 +1316,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "D3-03",
@@ -1211,7 +1333,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "D3-04",
@@ -1225,7 +1350,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "D3-05",
@@ -1269,7 +1397,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "D4-02",
@@ -1283,7 +1414,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "D4-03",
@@ -1339,7 +1473,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "D5-03",
@@ -1392,7 +1529,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "E1-02",
@@ -1406,7 +1546,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "E1-03",
@@ -1420,7 +1563,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "E1-04",
@@ -1464,7 +1610,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "E2-02",
@@ -1478,7 +1627,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "E2-03",
@@ -1540,7 +1692,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "E4-02",
@@ -1566,7 +1721,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "E4-04",
@@ -1598,7 +1756,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "E5-02",
@@ -1663,7 +1824,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "F1-02",
@@ -1695,7 +1859,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "F2-02",
@@ -1739,7 +1906,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "F3-02",
@@ -1753,7 +1923,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "F3-03",
@@ -1767,7 +1940,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "F3-04",
@@ -1781,7 +1957,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "F3-05",
@@ -1849,7 +2028,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "F4-02",
@@ -1863,7 +2045,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "F4-03",
@@ -1895,7 +2080,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "F5-02",
@@ -1951,7 +2139,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "F6-02",
@@ -1977,7 +2168,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "F6-04",
@@ -2018,7 +2212,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "G1-02",
@@ -2032,7 +2229,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "G1-03",
@@ -2160,7 +2360,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "G4-03",
@@ -2228,7 +2431,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "G5-04",
@@ -2305,7 +2511,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "H1-05",
@@ -2337,7 +2546,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "H2-02",
@@ -2405,7 +2617,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "H3-04",
@@ -2419,7 +2634,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "H3-05",
@@ -2451,7 +2669,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "H4-02",
@@ -2507,7 +2728,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "H5-02",
@@ -2533,7 +2757,10 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
+            "references": [
+                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
+                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
+            ]
           },
           {
             "id": "H5-04",

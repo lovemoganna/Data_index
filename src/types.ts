@@ -1,6 +1,13 @@
 export type Priority = 'P0' | 'P1' | 'P2';
 export type Status = 'active' | 'inactive';
 export type IndicatorType = 'base' | 'derived';
+export type ReferenceType = 'depends_on' | 'used_by' | 'related_to' | 'calculated_from';
+
+export interface IndicatorReference {
+  targetId: string;        // 目标指标ID
+  type: ReferenceType;     // 引用类型
+  description?: string;    // 引用描述
+}
 
 export interface Indicator {
   id: string;
@@ -14,7 +21,7 @@ export interface Indicator {
   priority: Priority;
   status: Status;
   indicatorType: IndicatorType; // 指标性质：基础指标(base)或衍生指标(derived)
-  usages: string[];           // 调用方：指标被哪些模块或场景使用
+  references: IndicatorReference[]; // 双向链接：与其他指标的关系
 }
 
 export interface SubCategory {

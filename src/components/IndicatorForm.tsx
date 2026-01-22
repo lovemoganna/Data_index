@@ -30,7 +30,7 @@ export const IndicatorForm: React.FC<Props> = ({
     priority: 'P1',
     status: 'active',
     indicatorType: 'derived',
-    usages: []
+    references: []
   });
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export const IndicatorForm: React.FC<Props> = ({
         setSelectedCatId(defCat);
         setSelectedSubId(defSub);
         setFormData({
-            id: '', name: '', definition: '', purpose: '', formula: '', threshold: '', calculationCase: '', riskInterpretation: '', priority: 'P1', status: 'active', indicatorType: 'derived', usages: []
+            id: '', name: '', definition: '', purpose: '', formula: '', threshold: '', calculationCase: '', riskInterpretation: '', priority: 'P1', status: 'active', indicatorType: 'derived', references: []
         });
       }
     }
@@ -147,15 +147,68 @@ export const IndicatorForm: React.FC<Props> = ({
                         <textarea value={formData.calculationCase} onChange={e => setFormData({...formData, calculationCase: e.target.value})} rows={2} className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 outline-none text-xs leading-relaxed" placeholder="提供一个易于理解的数值计算实例..." />
                     </div>
                     <div>
-                        <label className="text-[10px] font-black text-cyan-500 uppercase mb-2 flex items-center gap-1.5"><Link2 size={12}/> 调用方 (双向链接)</label>
-                        <textarea
-                            value={formData.usages.join('\n')}
-                            onChange={e => setFormData({...formData, usages: e.target.value.split('\n').filter(u => u.trim())})}
-                            rows={3}
-                            className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 outline-none text-xs leading-relaxed"
-                            placeholder="输入使用此指标的模块或场景，每行一个：&#10;• 实时监控面板&#10;• 风控规则引擎&#10;• 用户画像分析"
-                        />
-                        <div className="text-[9px] text-slate-400 mt-1">每行一个使用场景，支持双向链接追踪</div>
+                        <label className="text-[10px] font-black text-cyan-500 uppercase mb-2 flex items-center gap-1.5"><Link2 size={12}/> 双向链接 (References)</label>
+                        <div className="space-y-2">
+                            {formData.references.map((ref, index) => (
+                                <div key={index} className="flex gap-2 items-center p-2 bg-cyan-50/50 dark:bg-cyan-900/20 rounded-lg">
+                                    <select
+                                        value={ref.type}
+                                        onChange={e => {
+                                            const newRefs = [...formData.references];
+                                            newRefs[index].type = e.target.value as any;
+                                            setFormData({...formData, references: newRefs});
+                                        }}
+                                        className="flex-1 p-1 text-xs bg-white dark:bg-slate-800 rounded border border-cyan-200 dark:border-cyan-700"
+                                    >
+                                        <option value="depends_on">依赖于</option>
+                                        <option value="used_by">被使用于</option>
+                                        <option value="related_to">相关于</option>
+                                        <option value="calculated_from">计算自</option>
+                                    </select>
+                                    <select
+                                        value={ref.targetId}
+                                        onChange={e => {
+                                            const newRefs = [...formData.references];
+                                            newRefs[index].targetId = e.target.value;
+                                            setFormData({...formData, references: newRefs});
+                                        }}
+                                        className="flex-1 p-1 text-xs bg-white dark:bg-slate-800 rounded border border-cyan-200 dark:border-cyan-700"
+                                    >
+                                        <option value="">选择目标指标...</option>
+                                        {categories.flatMap(cat =>
+                                            cat.subcategories.flatMap(sub =>
+                                                sub.indicators
+                                                    .filter(ind => ind.id !== formData.id) // 排除自己
+                                                    .map(ind => (
+                                                        <option key={ind.id} value={ind.id}>
+                                                            {ind.name} ({ind.id})
+                                                        </option>
+                                                    ))
+                                            )
+                                        )}
+                                    </select>
+                                    <button
+                                        onClick={() => {
+                                            const newRefs = formData.references.filter((_, i) => i !== index);
+                                            setFormData({...formData, references: newRefs});
+                                        }}
+                                        className="p-1 text-red-500 hover:text-red-700"
+                                    >
+                                        <X size={12} />
+                                    </button>
+                                </div>
+                            ))}
+                            <button
+                                onClick={() => setFormData({
+                                    ...formData,
+                                    references: [...formData.references, { targetId: '', type: 'used_by', description: '' }]
+                                })}
+                                className="w-full p-2 bg-cyan-100 dark:bg-cyan-900/40 hover:bg-cyan-200 dark:hover:bg-cyan-800/60 text-cyan-700 dark:text-cyan-300 rounded-lg text-xs font-bold transition-all"
+                            >
+                                + 添加引用关系
+                            </button>
+                        </div>
+                        <div className="text-[9px] text-slate-400 mt-1">建立与其他指标的精确引用关系，支持Obsidian式双向链接</div>
                     </div>
                 </div>
             </div>

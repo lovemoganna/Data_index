@@ -130,12 +130,12 @@ window.verifyDataIntegrity = async function() {
           console.log(`   基础指标: ${baseIndicators.length}`);
           console.log(`   衍生指标: ${derivedIndicators.length}`);
 
-          // 检查调用方链接
+          // 检查双向链接
           console.log('6️⃣ 双向链接统计:');
-          const totalUsages = indicators.reduce((sum, ind) => sum + (ind.usages ? ind.usages.length : 0), 0);
-          const indicatorsWithUsages = indicators.filter(ind => ind.usages && ind.usages.length > 0).length;
-          console.log(`   总调用关系: ${totalUsages}`);
-          console.log(`   有调用关系的指标: ${indicatorsWithUsages}/${indicators.length}`);
+          const totalReferences = indicators.reduce((sum, ind) => sum + (ind.references ? ind.references.length : 0), 0);
+          const indicatorsWithReferences = indicators.filter(ind => ind.references && ind.references.length > 0).length;
+          console.log(`   总引用关系: ${totalReferences}`);
+          console.log(`   有引用关系的指标: ${indicatorsWithReferences}/${indicators.length}`);
         } else {
           console.log('   ⚠️ 没有分类数据可以验证');
         }

@@ -5,7 +5,7 @@ import { getInitialData } from '../constants';
 import { importService } from '../utils/importService';
 
 // IndexedDB 数据库版本
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 const DB_NAME = 'MECERiskOntologyDB';
 const STORAGE_KEY = 'monitor_ontology_v2'; // 用于向后兼容的localStorage key
 
@@ -19,7 +19,7 @@ interface DBIndicator extends Indicator {
   categoryId: string;
   subcategoryId: string;
   indicatorType: IndicatorType;
-  usages: string[];
+  references: IndicatorReference[];
 }
 
 // 创建IndexedDB数据库实例
@@ -45,6 +45,28 @@ class MECERiskDB extends Dexie {
         await tx.table('indicators').update(indicator.id, {
           indicatorType: indicator.indicatorType || 'derived',
           usages: indicator.usages || []
+        });
+      }
+    });
+
+    // 版本3：将usages字段改为references结构化字段
+    this.version(3).stores({
+      categories: 'id, name, color',
+      indicators: 'id, categoryId, subcategoryId, priority, status, name, indicatorType, references'
+    }).upgrade(async (tx) => {
+      // 升级现有指标，将usages转换为references
+      const indicators = await tx.table('indicators').toArray();
+      for (const indicator of indicators) {
+        const usages = indicator.usages || [];
+        const references = usages.map((usage: string) => ({
+          targetId: usage,
+          type: 'used_by' as const,
+          description: `Used by: ${usage}`
+        }));
+
+        await tx.table('indicators').update(indicator.id, {
+          references: references,
+          usages: undefined // 移除旧字段
         });
       }
     });
@@ -112,7 +134,7 @@ let initializationPromise: Promise<void> | null = null;
               categoryId: category.id,
               subcategoryId: subcategory.id,
               indicatorType: indicator.indicatorType || 'derived', // 默认设为衍生指标
-              usages: indicator.usages || [] // 默认空数组
+              references: indicator.references || [] // 默认空数组
             };
             await db.indicators.add(enhancedIndicator);
           }
@@ -233,11 +255,13 @@ export const dataService = {
 
           for (const subcategory of category.subcategories) {
             for (const indicator of subcategory.indicators) {
-              await db.indicators.add({
-                ...indicator,
-                categoryId: category.id,
-                subcategoryId: subcategory.id
-              });
+          await db.indicators.add({
+            ...indicator,
+            categoryId: category.id,
+            subcategoryId: subcategory.id,
+            indicatorType: indicator.indicatorType || 'derived',
+            references: indicator.references || []
+          });
             }
           }
         }
@@ -271,11 +295,13 @@ export const dataService = {
 
           for (const subcategory of category.subcategories) {
             for (const indicator of subcategory.indicators) {
-              await db.indicators.add({
-                ...indicator,
-                categoryId: category.id,
-                subcategoryId: subcategory.id
-              });
+          await db.indicators.add({
+            ...indicator,
+            categoryId: category.id,
+            subcategoryId: subcategory.id,
+            indicatorType: indicator.indicatorType || 'derived',
+            references: indicator.references || []
+          });
             }
           }
         }
