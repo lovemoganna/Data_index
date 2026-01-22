@@ -27,7 +27,7 @@ import {
   Activity, Users, TrendingUp, BarChart3, Layers, Link, Clock,
   FileSpreadsheet, Shield, AlertTriangle, Eye, Cpu, BookOpen,
   Maximize2, Minimize2, ChevronRight, Hash, Filter, LayoutGrid, Bell,
-  Download, ChevronDown
+  Download, ChevronDown, X
 } from 'lucide-react';
 
 const iconMap: any = { Users, TrendingUp, Activity, BarChart3, Layers, Link, Clock, Shield, AlertTriangle };
@@ -48,6 +48,8 @@ function App() {
   const [isCompact, setIsCompact] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [linkedIndicatorId, setLinkedIndicatorId] = useState<string | null>(null);
+  const [navigationHistory, setNavigationHistory] = useState<{catId: string, subId: string, search: string}[]>([]);
+  const [canGoBack, setCanGoBack] = useState(false);
 
   // 点击外部关闭导出菜单
   useEffect(() => {
@@ -155,11 +157,12 @@ function App() {
       cat.subcategories.forEach(sub => {
         if (selectedSubId !== 'ALL' && sub.id !== selectedSubId) return;
         sub.indicators.forEach(ind => {
-          if (!search || 
-              ind.name.includes(search) || 
-              ind.id.includes(search) || 
+          if (!search ||
+              ind.name.includes(search) ||
+              ind.id.includes(search) ||
               ind.definition.includes(search) ||
-              ind.purpose.includes(search)) {
+              ind.purpose.includes(search) ||
+              (ind.usages && ind.usages.some(usage => usage.includes(search)))) {
             list.push({ cat, sub, ind });
           }
         });
@@ -245,6 +248,14 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
 
   // 处理双向链接点击
   const handleUsageClick = (usage: string) => {
+    // 保存当前导航状态到历史记录
+    setNavigationHistory(prev => [...prev, {
+      catId: selectedCatId,
+      subId: selectedSubId,
+      search: search
+    }]);
+    setCanGoBack(true);
+
     // 查找是否是指标名称
     const foundIndicator = data.flatMap(cat =>
       cat.subcategories.flatMap(sub =>
@@ -260,11 +271,29 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
       setSelectedSubId(foundIndicator.sub.id);
       setLinkedIndicatorId(foundIndicator.ind.id);
 
+      // 清除搜索
+      setSearch('');
+
       // 短暂高亮效果
       setTimeout(() => setLinkedIndicatorId(null), 3000);
     } else {
       // 如果不是指标名称，按使用场景搜索
       setSearch(usage);
+      setSelectedCatId('ALL');
+      setSelectedSubId('ALL');
+    }
+  };
+
+  // 返回上一个导航状态
+  const handleGoBack = () => {
+    if (navigationHistory.length > 0) {
+      const lastState = navigationHistory[navigationHistory.length - 1];
+      setSelectedCatId(lastState.catId);
+      setSelectedSubId(lastState.subId);
+      setSearch(lastState.search);
+      setNavigationHistory(prev => prev.slice(0, -1));
+      setCanGoBack(navigationHistory.length > 1);
+      setLinkedIndicatorId(null);
     }
   };
 
@@ -444,8 +473,17 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                             placeholder={isMobile ? "搜索指标..." : "检索名称、定义、UID..."}
                             value={search}
                             onChange={e => setSearch(e.target.value)}
-                            className="w-full pl-7 md:pl-9 pr-3 md:pr-4 py-2 md:py-2 bg-slate-50 dark:bg-slate-800 border-none rounded-lg md:rounded-xl text-[11px] md:text-[11px] outline-none focus:ring-2 focus:ring-blue-500 font-medium transition-all"
+                            className="w-full pl-7 md:pl-9 pr-8 md:pr-9 py-2 md:py-2 bg-slate-50 dark:bg-slate-800 border-none rounded-lg md:rounded-xl text-[11px] md:text-[11px] outline-none focus:ring-2 focus:ring-blue-500 font-medium transition-all"
                         />
+                        {search && (
+                            <button
+                                onClick={() => setSearch('')}
+                                className="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full transition-colors"
+                                title="清除搜索"
+                            >
+                                <X size={12} className="text-slate-400" />
+                            </button>
+                        )}
                     </div>
                     <div className={`text-[10px] md:text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 md:gap-2 ${isMobile ? 'justify-center' : ''}`}>
                         <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-blue-500 animate-pulse"></span>
@@ -453,9 +491,27 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                     </div>
                 </div>
                 <div className={`flex items-center gap-1 md:gap-2 ${isMobile ? 'w-full justify-center' : ''}`}>
+                    {canGoBack && (
+                        <button
+                            onClick={handleGoBack}
+                            className="p-1.5 md:p-2 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-800/30 text-blue-600 dark:text-blue-400 rounded-lg md:rounded-xl transition-all"
+                            title="返回上一个视图"
+                        >
+                            <ChevronRight size={14} className="md:w-4 md:h-4 rotate-180" />
+                        </button>
+                    )}
                     <button onClick={() => setIsCompact(!isCompact)} className="p-1.5 md:p-2 bg-slate-50 dark:bg-slate-800 rounded-lg md:rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">
                         {isCompact ? <Minimize2 size={14} className="md:w-4 md:h-4"/> : <Maximize2 size={14} className="md:w-4 md:h-4"/>}
                     </button>
+                    {search && (
+                        <button
+                            onClick={() => setSearch('')}
+                            className="p-1.5 md:p-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-800/30 text-red-600 dark:text-red-400 rounded-lg md:rounded-xl transition-all"
+                            title="清除搜索"
+                        >
+                            <X size={14} className="md:w-4 md:h-4" />
+                        </button>
+                    )}
 
                     {/* 导出按钮组 */}
                     <div className="relative export-menu-container">
