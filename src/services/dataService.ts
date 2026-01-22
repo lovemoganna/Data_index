@@ -1,7 +1,7 @@
 
 import Dexie, { Table } from 'dexie';
 import { Category, Indicator } from '../types';
-import { INITIAL_DATA } from '../constants';
+import { getInitialData } from '../constants';
 import { importService } from '../utils/importService';
 
 // IndexedDB 数据库版本
@@ -51,7 +51,7 @@ const db = new MECERiskDB();
 
       // 尝试从localStorage读取数据
       const savedData = localStorage.getItem(STORAGE_KEY);
-      let dataToMigrate: Category[] = INITIAL_DATA;
+      let dataToMigrate: Category[] = getInitialData();
 
       if (savedData) {
         try {
@@ -139,7 +139,7 @@ const rebuildDataFromDB = async (): Promise<Category[]> => {
       };
     });
 
-    return result.length > 0 ? result : INITIAL_DATA;
+    return result.length > 0 ? result : getInitialData();
   } catch (error) {
     console.error('重建数据结构失败:', error);
     return INITIAL_DATA;
@@ -163,7 +163,7 @@ export const dataService = {
       return await rebuildDataFromDB();
     } catch (e) {
       console.error("Failed to load data from IndexedDB", e);
-      return INITIAL_DATA;
+      return getInitialData();
     }
   },
 
@@ -216,7 +216,7 @@ export const dataService = {
         await db.indicators.clear();
 
         // 保存默认数据
-        for (const category of INITIAL_DATA) {
+        for (const category of getInitialData()) {
           await db.categories.add({
             id: category.id,
             name: category.name,
@@ -238,7 +238,7 @@ export const dataService = {
         }
       });
 
-      return INITIAL_DATA;
+      return getInitialData();
     } catch (error) {
       console.error('重置默认数据失败:', error);
       throw error;
@@ -300,7 +300,7 @@ export const dataService = {
   getAllSync: (): Category[] => {
     // 这是一个临时的兼容性方法，会被逐步淘汰
     console.warn('使用同步方法 getAllSync，这可能会导致性能问题。请使用异步方法 getAll()');
-    return INITIAL_DATA;
+    return getInitialData();
   },
 
   saveAllSync: (data: Category[]): void => {

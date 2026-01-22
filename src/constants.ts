@@ -1,6 +1,28 @@
 import { Category } from './types';
 
-export const INITIAL_DATA: Category[] = [
+// 导入集成后的完整指标数据
+import { INTEGRATED_INDICATORS } from './constants-integrated';
+
+// 获取当前数据模式（运行时动态获取）
+export const getCurrentDataMode = (): 'basic' | 'full' => {
+  // 首先检查localStorage中的用户偏好
+  const savedMode = localStorage.getItem('preferred_data_mode');
+  if (savedMode === 'basic' || savedMode === 'full') {
+    return savedMode;
+  }
+
+  // 然后检查环境变量
+  const envMode = process.env.REACT_APP_DATA_MODE;
+  if (envMode === 'basic' || envMode === 'full') {
+    return envMode;
+  }
+
+  // 默认使用full模式以确保173个专业指标完全加载
+  return 'full';
+};
+
+// 基础模式的原始数据
+const BASIC_DATA: Category[] = [
     {
         id: 'A',
         name: '账号与身份维度',
@@ -126,6 +148,18 @@ export const INITIAL_DATA: Category[] = [
         ]
     }
 ];
+
+// 导出数据切换函数
+export const getInitialData = (mode?: 'basic' | 'full'): Category[] => {
+  const targetMode = mode || getCurrentDataMode();
+  return targetMode === 'full' ? INTEGRATED_INDICATORS : BASIC_DATA;
+};
+
+// 导出当前使用的模式
+export const CURRENT_DATA_MODE = getCurrentDataMode();
+
+// 为了向后兼容，保留INITIAL_DATA作为动态获取的常量
+export const INITIAL_DATA = getInitialData();
 
 export const TUTORIAL_CONTENT = `
 # 加密货币现货风控本体生产白皮书 (40项)

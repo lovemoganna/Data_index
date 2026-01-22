@@ -1,16 +1,27 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { Category, SubCategory, Indicator, Stats } from './types';
 import { dataService } from './services/dataService';
-import RiskScoringEngine from './services/riskEngine'; 
+import { CURRENT_DATA_MODE } from './constants';
+import RiskScoringEngine from './services/riskEngine';
 import * as exportService from './utils/exportService';
-import { IndicatorForm } from './components/IndicatorForm';
-import { CategoryForm, SubCategoryForm } from './components/StructureForms';
-import { TutorialView } from './components/TutorialView';
-import { ManagementPanel } from './components/ManagementPanel';
-import { DataAnalysisPanel } from './components/DataAnalysisPanel';
-import { RealtimeMonitor } from './components/RealtimeMonitor';
-import { AlertRulesEngine } from './components/AlertRulesEngine';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { LoadingOverlay, LoadingSpinner, StatusIndicator, TableSkeleton } from './components/LoadingSpinner';
+import { LanguageSelector } from './components/LanguageSelector';
+import { useResponsive } from './hooks/useResponsive';
+import i18n from './utils/i18n';
+
+// 懒加载组件以实现代码分割
+const IndicatorForm = lazy(() => import('./components/IndicatorForm').then(module => ({ default: module.IndicatorForm })));
+const CategoryForm = lazy(() => import('./components/StructureForms').then(module => ({ default: module.CategoryForm })));
+const SubCategoryForm = lazy(() => import('./components/StructureForms').then(module => ({ default: module.SubCategoryForm })));
+const TutorialView = lazy(() => import('./components/TutorialView').then(module => ({ default: module.TutorialView })));
+const ManagementPanel = lazy(() => import('./components/ManagementPanel').then(module => ({ default: module.ManagementPanel })));
+const DataAnalysisPanel = lazy(() => import('./components/DataAnalysisPanel').then(module => ({ default: module.DataAnalysisPanel })));
+const RealtimeMonitor = lazy(() => import('./components/RealtimeMonitor').then(module => ({ default: module.RealtimeMonitor })));
+const AlertRulesEngine = lazy(() => import('./components/AlertRulesEngine').then(module => ({ default: module.AlertRulesEngine })));
+const VirtualizedTable = lazy(() => import('./components/VirtualizedList').then(module => ({ default: module.VirtualizedTable })));
+const DataModeSwitcher = lazy(() => import('./components/DataModeSwitcher').then(module => ({ default: module.DataModeSwitcher })));
 import {
   Search, Sun, Moon,
   Activity, Users, TrendingUp, BarChart3, Layers, Link, Clock,
@@ -26,7 +37,10 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-  const [activeTab, setActiveTab] = useState<'monitor' | 'manage' | 'tutorial' | 'analytics' | 'realtime' | 'alerts'>('monitor');
+  // 使用响应式 Hook
+  const { isMobile, isTablet, isDesktop, breakpoint } = useResponsive();
+
+  const [activeTab, setActiveTab] = useState<'monitor' | 'manage' | 'tutorial' | 'analytics' | 'realtime' | 'alerts' | 'settings'>('monitor');
   const [selectedCatId, setSelectedCatId] = useState<string>('A');
   const [selectedSubId, setSelectedSubId] = useState<string>('ALL');
 
@@ -50,18 +64,48 @@ function App() {
   const [isCatModalOpen, setIsCatModalOpen] = useState(false);
   const [editingInd, setEditingInd] = useState<{catId: string, subId: string, indId?: string} | null>(null);
 
-  // 初始化数据加载
+  // 初始化数据加载 - 强制使用完整数据
   useEffect(() => {
     const loadData = async () => {
       try {
         setIsLoading(true);
-        const loadedData = await dataService.getAll();
-        setData(loadedData);
+
+        // 强制清除所有缓存，确保加载完整数据
+        try {
+          await dataService.clearAllIndicators([]);
+          localStorage.removeItem('data_migration_completed');
+          localStorage.setItem('preferred_data_mode', 'full');
+        } catch (e) {
+          console.warn('清除缓存失败:', e);
+        }
+
+        // 直接使用完整数据，避免缓存问题
+        const { INTEGRATED_INDICATORS } = await import('./constants-integrated');
+        console.log(`🔥 强制加载完整数据: ${INTEGRATED_INDICATORS.length} 分类`);
+
+        // 统计实际指标数量
+        let totalIndicators = 0;
+        INTEGRATED_INDICATORS.forEach(cat => {
+          cat.subcategories.forEach(sub => {
+            totalIndicators += sub.indicators.length;
+          });
+        });
+        console.log(`🔥 完整指标数量: ${totalIndicators}`);
+
+        setData(INTEGRATED_INDICATORS);
+
+        // 异步保存到缓存，确保下次也能加载
+        try {
+          await dataService.saveAll(INTEGRATED_INDICATORS);
+        } catch (e) {
+          console.warn('保存数据失败:', e);
+        }
+
       } catch (error) {
-        console.error('Failed to load data:', error);
-        // 如果加载失败，使用默认数据
-        const { INITIAL_DATA } = await import('./constants');
-        setData(INITIAL_DATA);
+        console.error('Failed to load complete data:', error);
+        // 最后的fallback
+        const { getInitialData } = await import('./constants');
+        setData(getInitialData());
       } finally {
         setIsLoading(false);
       }
@@ -144,9 +188,38 @@ function App() {
   const handleImport = async (content: string, fileName: string) => {
     try {
       setIsLoading(true);
-      const importedData = await dataService.validateAndImport(content, fileName);
-      setData(importedData);
-      alert(`✅ 体系导入成功！共加载 ${importedData.length} 个维度。`);
+
+      // 使用增强版导入服务
+      const { importService } = await import('./utils/importService');
+      const result = importService.parseContent(content, fileName, {
+        validateData: true,
+        skipInvalidRows: true,
+        autoGenerateIds: true,
+        onProgress: (progress, message) => {
+          console.log(`导入进度: ${progress}% - ${message}`);
+        }
+      });
+
+      if (!result.success) {
+        const errorMessages = result.errors.map(e => `第${e.row}行: ${e.message}`).join('\n');
+        alert(`❌ 导入失败:\n${errorMessages}`);
+        return;
+      }
+
+      // 显示警告信息
+      if (result.warnings.length > 0) {
+        const warningMessages = result.warnings.map(w => `第${w.row}行: ${w.message}`).join('\n');
+        console.warn('导入警告:', warningMessages);
+      }
+
+      // 保存导入的数据
+      await dataService.saveAll(result.data);
+      setData(result.data);
+
+      alert(`✅ 体系导入成功！
+共加载 ${result.stats.categoriesImported} 个维度，${result.stats.subcategoriesImported} 个子类，${result.stats.indicatorsImported} 个指标。
+${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告，请查看控制台。` : ''}`);
+
     } catch (e: any) {
       alert(`❌ 导入失败: ${e.message}\n请检查文件内容是否符合导出规范。`);
     } finally {
@@ -172,11 +245,22 @@ function App() {
   // Loading 状态显示
   if (isLoading && data.length === 0) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-          <p className="text-slate-600 dark:text-slate-400">正在加载风险本体数据...</p>
-          <p className="text-sm text-slate-500 dark:text-slate-500 mt-2">首次使用可能需要数据迁移</p>
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center p-4">
+        <div className="max-w-md w-full">
+          <LoadingOverlay
+            isVisible={true}
+            message="正在加载风险本体数据..."
+          >
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl p-8 text-center">
+              <LoadingSpinner size="xl" className="mb-4" />
+              <p className="text-slate-600 dark:text-slate-400 font-medium">
+                正在加载风险本体数据...
+              </p>
+              <p className="text-sm text-slate-500 dark:text-slate-500 mt-2">
+                首次使用可能需要数据迁移
+              </p>
+            </div>
+          </LoadingOverlay>
         </div>
       </div>
     );
@@ -198,12 +282,13 @@ function App() {
 
           <nav className="flex items-center bg-slate-800 rounded-xl p-1 border border-slate-700/50">
             {[
-              { id: 'monitor', label: '生产看板', icon: Eye },
-              { id: 'realtime', label: '实时监控', icon: Activity },
-              { id: 'analytics', label: '数据分析', icon: BarChart3 },
-              { id: 'alerts', label: '告警规则', icon: Bell },
-              { id: 'manage', label: '体系管理', icon: Cpu },
-              { id: 'tutorial', label: '学习中心', icon: BookOpen }
+              { id: 'monitor', label: i18n.t('navigation.monitor'), icon: Eye },
+              { id: 'realtime', label: i18n.t('navigation.realtime'), icon: Activity },
+              { id: 'analytics', label: i18n.t('navigation.analytics'), icon: BarChart3 },
+              { id: 'alerts', label: i18n.t('navigation.alerts'), icon: Bell },
+              { id: 'manage', label: i18n.t('navigation.manage'), icon: Cpu },
+              { id: 'settings', label: '设置', icon: Shield },
+              { id: 'tutorial', label: i18n.t('navigation.tutorial'), icon: BookOpen }
             ].map(tab => (
               <button 
                 key={tab.id}
@@ -220,6 +305,7 @@ function App() {
                 <span className="text-[10px] font-black bg-red-600 px-2 py-0.5 rounded shadow-sm">P0: {stats.p0}</span>
                 <span className="text-[10px] font-black bg-orange-600 px-2 py-0.5 rounded shadow-sm">P1: {stats.p1}</span>
             </div>
+            <LanguageSelector />
             <button onClick={toggleDarkMode} className="p-2 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-all">
               {darkMode ? <Sun size={18} /> : <Moon size={18} />}
             </button>
@@ -229,32 +315,38 @@ function App() {
 
       <main className="w-full min-h-screen px-2 py-1">
         {activeTab === 'monitor' && (
-          <div className="flex flex-col h-[calc(100vh-80px)] animate-in slide-in-from-bottom-2 duration-500">
-            <div className="flex gap-2 mb-6 overflow-x-auto pb-2 custom-scrollbar">
-                <button 
-                    onClick={() => { setSelectedCatId('ALL'); setSelectedSubId('ALL'); }}
-                    className={`flex flex-col items-center justify-center min-w-[100px] p-3 rounded-2xl border-2 transition-all ${selectedCatId === 'ALL' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600' : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-850 text-slate-400'}`}
-                >
-                    <LayoutGrid size={24} className="mb-2" />
-                    <span className="text-[11px] font-black uppercase">全部维度</span>
-                </button>
-                {data.map(cat => (
-                    <button 
-                        key={cat.id}
-                        onClick={() => { setSelectedCatId(cat.id); setSelectedSubId('ALL'); }}
-                        className={`flex flex-col items-start justify-between min-w-[200px] p-4 rounded-2xl border-2 transition-all ${selectedCatId === cat.id ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-xl shadow-blue-500/10' : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-850 opacity-60 hover:opacity-100'}`}
-                    >
-                        <div className="flex justify-between w-full mb-3">
-                            <div className={`p-2 rounded-lg bg-white dark:bg-slate-800 shadow-sm ${selectedCatId === cat.id ? 'text-blue-600' : 'text-slate-400'}`}>
-                                {React.createElement(iconMap[cat.icon] || Activity, { size: 18 })}
-                            </div>
-                            <span className="text-[10px] font-mono font-bold text-slate-400">0{cat.id}</span>
-                        </div>
-                        <span className={`text-[13px] font-black ${selectedCatId === cat.id ? 'text-blue-600' : 'text-slate-700 dark:text-slate-200'}`}>{cat.name}</span>
-                        <span className="text-[9px] text-slate-400 mt-1 uppercase font-bold tracking-wider">{cat.description}</span>
-                    </button>
-                ))}
-            </div>
+          <div className={`flex flex-col h-[calc(100vh-80px)] animate-in slide-in-from-bottom-2 duration-500`}>
+            <LoadingOverlay isVisible={isLoading} message="正在加载数据...">
+              <div className={`flex gap-2 mb-6 overflow-x-auto pb-2 custom-scrollbar ${isMobile ? 'flex-wrap' : ''}`}>
+                  <button
+                      onClick={() => { setSelectedCatId('ALL'); setSelectedSubId('ALL'); }}
+                      className={`flex flex-col items-center justify-center ${isMobile ? 'min-w-[80px] p-2' : 'min-w-[100px] p-3'} rounded-2xl border-2 transition-all ${selectedCatId === 'ALL' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600' : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-850 text-slate-400'}`}
+                  >
+                      <LayoutGrid size={isMobile ? 20 : 24} className="mb-1" />
+                      <span className={`font-black uppercase ${isMobile ? 'text-[9px]' : 'text-[11px]'}`}>全部维度</span>
+                  </button>
+                  {data.map(cat => (
+                      <button
+                          key={cat.id}
+                          onClick={() => { setSelectedCatId(cat.id); setSelectedSubId('ALL'); }}
+                          className={`flex flex-col items-start justify-between ${isMobile ? 'min-w-[160px] p-3' : 'min-w-[200px] p-4'} rounded-2xl border-2 transition-all ${selectedCatId === cat.id ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-xl shadow-blue-500/10' : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-850 opacity-60 hover:opacity-100'}`}
+                      >
+                          <div className="flex justify-between w-full mb-2">
+                              <div className={`p-1.5 rounded-lg bg-white dark:bg-slate-800 shadow-sm ${selectedCatId === cat.id ? 'text-blue-600' : 'text-slate-400'}`}>
+                                  {React.createElement(iconMap[cat.icon] || Activity, { size: isMobile ? 14 : 18 })}
+                              </div>
+                              <span className={`font-mono font-bold text-slate-400 ${isMobile ? 'text-[8px]' : 'text-[10px]'}`}>0{cat.id}</span>
+                          </div>
+                          <span className={`font-black ${selectedCatId === cat.id ? 'text-blue-600' : 'text-slate-700 dark:text-slate-200'} ${isMobile ? 'text-[11px]' : 'text-[13px]'}`}>{cat.name}</span>
+                          {!isMobile && (
+                            <span className="text-[9px] text-slate-400 mt-1 uppercase font-bold tracking-wider truncate w-full" title={cat.description}>
+                              {cat.description}
+                            </span>
+                          )}
+                      </button>
+                  ))}
+              </div>
+            </LoadingOverlay>
 
             {selectedCatId !== 'ALL' && activeCategory && (
                 <div className="flex items-center gap-2 mb-6 p-2 bg-slate-100 dark:bg-slate-800 rounded-2xl w-fit border border-slate-200 dark:border-slate-700">
@@ -419,48 +511,75 @@ function App() {
           </div>
         )}
 
-        {activeTab === 'manage' && (
-          <ManagementPanel 
-            data={data}
-            onEditIndicator={(catId, subId, indId) => { setEditingInd({catId, subId, indId}); setIsIndModalOpen(true); }}
-            onDeleteIndicator={(catId, subId, indId) => setData(dataService.deleteIndicator(data, catId, subId, indId))}
-            onAddIndicator={() => { setEditingInd({catId: selectedCatId === 'ALL' ? 'A' : selectedCatId, subId: selectedSubId === 'ALL' ? '' : selectedSubId}); setIsIndModalOpen(true); }}
-            onAddCategory={() => setIsCatModalOpen(true)}
-            onClearAll={handleClearAll}
-            onReset={handleReset}
-            onImport={handleImport}
-          />
-        )}
+        <Suspense fallback={
+          <div className="flex items-center justify-center h-[calc(100vh-80px)]">
+            <LoadingOverlay isVisible={true} message="正在加载模块...">
+              <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl p-8 text-center">
+                <LoadingSpinner size="lg" className="mb-4" />
+                <p className="text-slate-600 dark:text-slate-400 font-medium">
+                  正在加载模块...
+                </p>
+              </div>
+            </LoadingOverlay>
+          </div>
+        }>
+          {activeTab === 'manage' && (
+            <ManagementPanel
+              data={data}
+              onEditIndicator={(catId, subId, indId) => { setEditingInd({catId, subId, indId}); setIsIndModalOpen(true); }}
+              onDeleteIndicator={(catId, subId, indId) => setData(dataService.deleteIndicator(data, catId, subId, indId))}
+              onAddIndicator={() => { setEditingInd({catId: selectedCatId === 'ALL' ? 'A' : selectedCatId, subId: selectedSubId === 'ALL' ? '' : selectedSubId}); setIsIndModalOpen(true); }}
+              onAddCategory={() => setIsCatModalOpen(true)}
+              onClearAll={handleClearAll}
+              onReset={handleReset}
+              onImport={handleImport}
+            />
+          )}
 
-        {activeTab === 'realtime' && <RealtimeMonitor data={data} />}
+          {activeTab === 'realtime' && <RealtimeMonitor data={data} />}
 
-        {activeTab === 'analytics' && <DataAnalysisPanel data={data} />}
+          {activeTab === 'analytics' && <DataAnalysisPanel data={data} />}
 
-        {activeTab === 'alerts' && (
-          <AlertRulesEngine
-            data={data}
-            riskScore={(() => RiskScoringEngine.calculateRiskScore(data))()}
-          />
-        )}
+          {activeTab === 'alerts' && (
+            <AlertRulesEngine
+              data={data}
+              riskScore={(() => RiskScoringEngine.calculateRiskScore(data))()}
+            />
+          )}
 
-        {activeTab === 'tutorial' && <TutorialView />}
+          {activeTab === 'settings' && (
+            <DataModeSwitcher
+              currentMode={CURRENT_DATA_MODE}
+              onModeChange={(mode) => {
+                // 设置环境变量并重新加载
+                localStorage.setItem('preferred_data_mode', mode);
+                window.location.reload();
+              }}
+              onDataChange={setData}
+            />
+          )}
+
+          {activeTab === 'tutorial' && <TutorialView />}
+        </Suspense>
       </main>
 
-      <IndicatorForm 
-        isOpen={isIndModalOpen} 
-        onClose={() => setIsIndModalOpen(false)} 
-        initialData={editingInd?.indId ? data.find(c => c.id === editingInd.catId)?.subcategories.find(s => s.id === editingInd.subId)?.indicators.find(i => i.id === editingInd.indId) : undefined}
-        categories={data}
-        initialCatId={editingInd?.catId}
-        initialSubId={editingInd?.subId}
-        onSave={(ind, cId, sId) => { setData(dataService.upsertIndicator(data, ind, cId, sId, !editingInd?.indId)); setIsIndModalOpen(false); }}
-      />
-      
-      <CategoryForm 
-        isOpen={isCatModalOpen} 
-        onClose={() => setIsCatModalOpen(false)} 
-        onSave={(cat) => { setData([...data, cat]); setIsCatModalOpen(false); }} 
-      />
+      <Suspense fallback={<div></div>}>
+        <IndicatorForm
+          isOpen={isIndModalOpen}
+          onClose={() => setIsIndModalOpen(false)}
+          initialData={editingInd?.indId ? data.find(c => c.id === editingInd.catId)?.subcategories.find(s => s.id === editingInd.subId)?.indicators.find(i => i.id === editingInd.indId) : undefined}
+          categories={data}
+          initialCatId={editingInd?.catId}
+          initialSubId={editingInd?.subId}
+          onSave={(ind, cId, sId) => { setData(dataService.upsertIndicator(data, ind, cId, sId, !editingInd?.indId)); setIsIndModalOpen(false); }}
+        />
+
+        <CategoryForm
+          isOpen={isCatModalOpen}
+          onClose={() => setIsCatModalOpen(false)}
+          onSave={(cat) => { setData([...data, cat]); setIsCatModalOpen(false); }}
+        />
+      </Suspense>
     </div>
   );
 }
