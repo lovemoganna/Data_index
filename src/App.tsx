@@ -47,6 +47,7 @@ function App() {
   const [search, setSearch] = useState('');
   const [isCompact, setIsCompact] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
+  const [linkedIndicatorId, setLinkedIndicatorId] = useState<string | null>(null);
 
   // 点击外部关闭导出菜单
   useEffect(() => {
@@ -239,6 +240,31 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
       } finally {
         setIsLoading(false);
       }
+    }
+  };
+
+  // 处理双向链接点击
+  const handleUsageClick = (usage: string) => {
+    // 查找是否是指标名称
+    const foundIndicator = data.flatMap(cat =>
+      cat.subcategories.flatMap(sub =>
+        sub.indicators.find(ind =>
+          ind.name === usage || ind.id === usage
+        ) ? { cat, sub, ind: sub.indicators.find(ind => ind.name === usage || ind.id === usage)! } : []
+      )
+    ).find(item => item);
+
+    if (foundIndicator) {
+      // 如果是指标名称，跳转到该指标
+      setSelectedCatId(foundIndicator.cat.id);
+      setSelectedSubId(foundIndicator.sub.id);
+      setLinkedIndicatorId(foundIndicator.ind.id);
+
+      // 短暂高亮效果
+      setTimeout(() => setLinkedIndicatorId(null), 3000);
+    } else {
+      // 如果不是指标名称，按使用场景搜索
+      setSearch(usage);
     }
   };
 
@@ -501,7 +527,7 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
             {isMobile ? (
               <div className="flex-1 overflow-auto space-y-3 pb-4">
                 {filteredIndicators.map(({ cat, sub, ind }, idx) => (
-                  <div key={ind.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-lg">
+                  <div key={ind.id} className={`bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-lg transition-all ${linkedIndicatorId === ind.id ? 'ring-2 ring-cyan-400 bg-cyan-50/20 dark:bg-cyan-900/10' : ''}`}>
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
@@ -544,9 +570,14 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                           <span className="font-bold text-cyan-600 dark:text-cyan-400">调用方：</span>
                           <div className="flex flex-wrap gap-1 mt-1">
                             {ind.usages.map((usage, i) => (
-                              <span key={i} className="inline-block px-1.5 py-0.5 bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300 rounded text-[9px] font-bold">
-                                {usage}
-                              </span>
+                              <button
+                                key={i}
+                                onClick={() => handleUsageClick(usage)}
+                                className={`inline-block px-1.5 py-0.5 bg-cyan-100 dark:bg-cyan-900/40 hover:bg-cyan-200 dark:hover:bg-cyan-800/60 text-cyan-700 dark:text-cyan-300 rounded text-[9px] font-bold transition-all cursor-pointer hover:shadow-sm active:scale-95 ${linkedIndicatorId === ind.id ? 'ring-2 ring-cyan-400' : ''}`}
+                                title={`点击跳转: ${usage}`}
+                              >
+                                🔗 {usage}
+                              </button>
                             ))}
                           </div>
                         </div>
@@ -569,13 +600,13 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                             <th className="w-56 md:w-64 px-2 md:px-3 py-2 border-r border-slate-200 dark:border-slate-700 font-mono text-indigo-600 dark:text-indigo-400 bg-indigo-50/30 dark:bg-indigo-900/10">计算逻辑 (FORMULA)</th>
                             <th className="w-40 md:w-48 px-2 md:px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-orange-600 dark:text-orange-400">警报阈值</th>
                             <th className="w-56 md:w-64 px-2 md:px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-green-600 dark:text-green-400">数值演算案例</th>
-                            <th className="w-64 md:w-80 px-2 md:px-3 py-2 border-r border-slate-200 dark:border-slate-700 bg-cyan-50/40 dark:bg-cyan-900/10 text-cyan-600 dark:text-cyan-400 hidden xl:table-cell">调用方 (USAGES)</th>
+                            <th className="w-64 md:w-80 px-2 md:px-3 py-2 border-r border-slate-200 dark:border-slate-700 bg-cyan-50/40 dark:bg-cyan-900/10 text-cyan-600 dark:text-cyan-400 hidden xl:table-cell" title="双向链接：点击跳转到相关指标">🔗 调用方 (USAGES)</th>
                             <th className="w-80 md:w-96 px-2 md:px-3 py-2 text-red-700 dark:text-red-400">风险全景解读</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                         {filteredIndicators.map(({ cat, sub, ind }, idx) => (
-                            <tr key={ind.id} className={`group hover:bg-blue-50/40 dark:hover:bg-blue-900/10 transition-colors ${idx % 2 === 0 ? 'bg-white dark:bg-transparent' : 'bg-slate-50/20 dark:bg-slate-800/10'}`}>
+                            <tr key={ind.id} className={`group hover:bg-blue-50/40 dark:hover:bg-blue-900/10 transition-colors ${idx % 2 === 0 ? 'bg-white dark:bg-transparent' : 'bg-slate-50/20 dark:bg-slate-800/10'} ${linkedIndicatorId === ind.id ? 'ring-2 ring-cyan-400 bg-cyan-50/20 dark:bg-cyan-900/10' : ''}`}>
                                 <td className="px-2 py-2 font-mono text-[9px] md:text-[10px] font-black text-slate-400 border-r border-slate-100 dark:border-slate-800 sticky left-0 bg-inherit z-10">{ind.id}</td>
                                 <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 sticky left-20 md:left-24 bg-inherit z-10">
                                     <div className="flex flex-col">
@@ -614,9 +645,14 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                                     {ind.usages && ind.usages.length > 0 ? (
                                         <div className="flex flex-wrap gap-1 max-w-[300px]">
                                             {ind.usages.slice(0, 3).map((usage, i) => (
-                                                <span key={i} className="inline-block px-1.5 py-0.5 bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300 rounded text-[8px] md:text-[9px] font-bold truncate max-w-[80px]">
-                                                    {usage}
-                                                </span>
+                                                <button
+                                                    key={i}
+                                                    onClick={() => handleUsageClick(usage)}
+                                                    className={`inline-block px-1.5 py-0.5 bg-cyan-100 dark:bg-cyan-900/40 hover:bg-cyan-200 dark:hover:bg-cyan-800/60 text-cyan-700 dark:text-cyan-300 rounded text-[8px] md:text-[9px] font-bold truncate max-w-[80px] transition-all cursor-pointer hover:shadow-sm active:scale-95 ${linkedIndicatorId === ind.id ? 'ring-2 ring-cyan-400' : ''}`}
+                                                    title={`点击跳转: ${usage}`}
+                                                >
+                                                    🔗 {usage}
+                                                </button>
                                             ))}
                                             {ind.usages.length > 3 && (
                                                 <span className="inline-block px-1.5 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 rounded text-[8px] md:text-[9px] font-bold">
