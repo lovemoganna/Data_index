@@ -37,6 +37,10 @@ class MECERiskDB extends Dexie {
 // 创建数据库实例
 const db = new MECERiskDB();
 
+// 初始化状态管理
+let isInitializing = false;
+let initializationPromise: Promise<void> | null = null;
+
   // 数据迁移函数：从localStorage迁移到IndexedDB
   const migrateFromLocalStorage = async (): Promise<void> => {
     try {
@@ -149,12 +153,30 @@ const rebuildDataFromDB = async (): Promise<Category[]> => {
 export const dataService = {
   // 初始化数据库（在应用启动时调用）
   initialize: async (): Promise<void> => {
-    try {
-      await migrateFromLocalStorage();
-    } catch (error) {
-      console.error('数据库初始化失败:', error);
-      throw error;
+    // 如果已经在初始化中，等待完成
+    if (isInitializing && initializationPromise) {
+      return initializationPromise;
     }
+
+    // 如果已经初始化完成，直接返回
+    if (initializationPromise) {
+      return initializationPromise;
+    }
+
+    // 开始初始化
+    isInitializing = true;
+    initializationPromise = (async () => {
+      try {
+        await migrateFromLocalStorage();
+      } catch (error) {
+        console.error('数据库初始化失败:', error);
+        throw error;
+      } finally {
+        isInitializing = false;
+      }
+    })();
+
+    return initializationPromise;
   },
 
   getAll: async (): Promise<Category[]> => {

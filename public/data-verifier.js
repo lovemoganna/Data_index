@@ -22,70 +22,101 @@ window.verifyDataIntegrity = async function() {
     dbRequest.onsuccess = function(event) {
       const db = event.target.result;
 
-      try {
-        // 检查categories表
-        const categoryTransaction = db.transaction(['categories'], 'readonly');
-        const categoryStore = categoryTransaction.objectStore('categories');
-        const categoryRequest = categoryStore.getAll();
+      // 检查数据库中实际存在的对象存储
+      const objectStoreNames = Array.from(db.objectStoreNames);
+      console.log(`   数据库中的对象存储: [${objectStoreNames.join(', ')}]`);
 
-        categoryRequest.onsuccess = function() {
-          const categories = categoryRequest.result;
-          console.log(`   分类数量: ${categories.length}`);
+      let categories = [];
+      let indicators = [];
 
+      // 检查categories表
+      if (objectStoreNames.includes('categories')) {
+        try {
+          const categoryTransaction = db.transaction(['categories'], 'readonly');
+          const categoryStore = categoryTransaction.objectStore('categories');
+          const categoryRequest = categoryStore.getAll();
+
+          categoryRequest.onsuccess = function() {
+            categories = categoryRequest.result;
+            console.log(`   分类数量: ${categories.length}`);
+            checkIndicators();
+          };
+
+          categoryRequest.onerror = function() {
+            console.log('   ❌ 无法访问categories表');
+            checkIndicators();
+          };
+        } catch (error) {
+          console.log('   ❌ categories表访问失败:', error.message);
+          checkIndicators();
+        }
+      } else {
+        console.log('   ⚠️ categories对象存储不存在');
+        checkIndicators();
+      }
+
+      function checkIndicators() {
+        // 检查indicators表
+        if (objectStoreNames.includes('indicators')) {
           try {
-            // 检查indicators表
             const indicatorTransaction = db.transaction(['indicators'], 'readonly');
             const indicatorStore = indicatorTransaction.objectStore('indicators');
             const indicatorRequest = indicatorStore.getAll();
 
             indicatorRequest.onsuccess = function() {
-              const indicators = indicatorRequest.result;
+              indicators = indicatorRequest.result;
               console.log(`   指标数量: ${indicators.length}`);
-
-              // 验证数据完整性
-              console.log('3️⃣ 数据完整性验证:');
-              const expectedFull = 173;
-              const expectedBasic = 40;
-
-              if (savedMode === 'full' && indicators.length !== expectedFull) {
-                console.log(`   ❌ 完整模式数据不匹配: 期望${expectedFull}个，实际${indicators.length}个`);
-              } else if (savedMode === 'basic' && indicators.length !== expectedBasic) {
-                console.log(`   ❌ 基础模式数据不匹配: 期望${expectedBasic}个，实际${indicators.length}个`);
-              } else if (!savedMode && indicators.length !== expectedBasic) {
-                console.log(`   ❌ 默认数据不匹配: 期望${expectedBasic}个，实际${indicators.length}个`);
-              } else {
-                console.log(`   ✅ 数据数量正确 (${indicators.length}个指标)`);
-              }
-
-              // 检查数据结构
-              console.log('4️⃣ 数据结构检查:');
-              const categoryIds = categories.map(c => c.id).sort();
-              const expectedIds = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-
-              if (JSON.stringify(categoryIds) === JSON.stringify(expectedIds)) {
-                console.log('   ✅ 分类结构完整');
-              } else {
-                console.log(`   ❌ 分类结构不完整: 期望[${expectedIds.join(',')}]，实际[${categoryIds.join(',')}]`);
-              }
-
-              db.close();
+              validateData();
             };
 
             indicatorRequest.onerror = function() {
               console.log('   ❌ 无法访问indicators表');
-              db.close();
+              validateData();
             };
           } catch (error) {
-            console.log('   ❌ indicators对象存储不存在:', error.message);
-            db.close();
+            console.log('   ❌ indicators表访问失败:', error.message);
+            validateData();
           }
-        };
+        } else {
+          console.log('   ⚠️ indicators对象存储不存在');
+          validateData();
+        }
+      }
 
-        categoryRequest.onerror = function() {
-          console.log('   ❌ 无法访问categories表');
-        };
-      } catch (error) {
-        console.log('   ❌ categories对象存储不存在:', error.message);
+      function validateData() {
+        // 验证数据完整性
+        console.log('3️⃣ 数据完整性验证:');
+        const expectedFull = 173;
+        const expectedBasic = 40;
+
+        if (indicators.length === 0) {
+          console.log('   ⚠️ 没有找到任何指标数据');
+        } else if (savedMode === 'full' && indicators.length !== expectedFull) {
+          console.log(`   ❌ 完整模式数据不匹配: 期望${expectedFull}个，实际${indicators.length}个`);
+        } else if (savedMode === 'basic' && indicators.length !== expectedBasic) {
+          console.log(`   ❌ 基础模式数据不匹配: 期望${expectedBasic}个，实际${indicators.length}个`);
+        } else if (!savedMode && indicators.length !== expectedBasic) {
+          console.log(`   ❌ 默认数据不匹配: 期望${expectedBasic}个，实际${indicators.length}个`);
+        } else {
+          console.log(`   ✅ 数据数量正确 (${indicators.length}个指标)`);
+        }
+
+        // 检查数据结构
+        console.log('4️⃣ 数据结构检查:');
+        if (categories.length > 0) {
+          const categoryIds = categories.map(c => c.id).sort();
+          const expectedIds = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+
+          if (JSON.stringify(categoryIds) === JSON.stringify(expectedIds)) {
+            console.log('   ✅ 分类结构完整');
+          } else {
+            console.log(`   ❌ 分类结构不完整: 期望[${expectedIds.join(',')}]，实际[${categoryIds.join(',')}]`);
+          }
+        } else {
+          console.log('   ⚠️ 没有分类数据可以验证');
+        }
+
+        db.close();
       }
     };
 
