@@ -24,10 +24,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "A1-02",
@@ -78,10 +75,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "A2-02",
@@ -95,10 +89,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "A2-03",
@@ -112,10 +103,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "A2-04",
@@ -129,10 +117,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "A2-05",
@@ -206,10 +191,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "A4-02",
@@ -223,10 +205,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "A4-03",
@@ -240,10 +219,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "A4-04",
@@ -275,10 +251,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "A5-02",
@@ -292,10 +265,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "A5-03",
@@ -309,10 +279,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "A5-04",
@@ -326,10 +293,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "A5-05",
@@ -368,7 +332,11 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "单笔充值50,000 USDT",
             "riskInterpretation": "大额单笔充值后立即交易提示定向套利",
             "priority": "P1",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "references": [
+              {"targetId": "B2-01", "type": "used_by", "description": "资金流向分析使用充值金额数据"}
+            ]
           },
           {
             "id": "B1-02",
@@ -406,10 +374,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "B1-05",
@@ -477,10 +442,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "B2-05",
@@ -512,10 +474,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "B3-02",
@@ -529,10 +488,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "B3-03",
@@ -546,10 +502,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "B3-04",
@@ -617,10 +570,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "B4-03",
@@ -664,10 +614,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "B5-02",
@@ -681,10 +628,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "B5-03",
@@ -735,7 +679,11 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "1小时内交易12笔",
             "riskInterpretation": "高频交易需区分正常量化与异常刷单",
             "priority": "P2",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "derived",
+            "references": [
+              {"targetId": "B1-01", "type": "depends_on", "description": "交易次数计算依赖充值行为数据"}
+            ]
           },
           {
             "id": "C1-02",
@@ -761,10 +709,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "C1-04",
@@ -796,10 +741,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "C2-02",
@@ -813,10 +755,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "C2-03",
@@ -830,10 +769,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "C2-04",
@@ -889,10 +825,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "C3-04",
@@ -930,10 +863,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "C3-07",
@@ -977,10 +907,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "C4-02",
@@ -994,10 +921,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "C4-03",
@@ -1029,10 +953,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "C5-02",
@@ -1046,10 +967,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "C5-03",
@@ -1105,10 +1023,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "C6-02",
@@ -1134,10 +1049,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "C6-04",
@@ -1151,10 +1063,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "C6-05",
@@ -1195,10 +1104,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "D1-02",
@@ -1212,10 +1118,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "D1-03",
@@ -1247,10 +1150,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "D2-02",
@@ -1264,10 +1164,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "D2-03",
@@ -1299,10 +1196,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "D3-02",
@@ -1316,10 +1210,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "D3-03",
@@ -1333,10 +1224,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "D3-04",
@@ -1350,10 +1238,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "D3-05",
@@ -1397,10 +1282,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "D4-02",
@@ -1414,10 +1296,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "D4-03",
@@ -1473,10 +1352,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "D5-03",
@@ -1529,10 +1405,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "E1-02",
@@ -1546,10 +1419,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "E1-03",
@@ -1563,10 +1433,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "E1-04",
@@ -1610,10 +1477,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "E2-02",
@@ -1627,10 +1491,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "E2-03",
@@ -1692,10 +1553,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "E4-02",
@@ -1721,10 +1579,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "E4-04",
@@ -1756,10 +1611,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "E5-02",
@@ -1824,10 +1676,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "F1-02",
@@ -1859,10 +1708,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "F2-02",
@@ -1906,10 +1752,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "F3-02",
@@ -1923,10 +1766,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "F3-03",
@@ -1940,10 +1780,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "F3-04",
@@ -1957,10 +1794,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "F3-05",
@@ -2028,10 +1862,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "F4-02",
@@ -2045,10 +1876,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "F4-03",
@@ -2080,10 +1908,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "F5-02",
@@ -2139,10 +1964,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "F6-02",
@@ -2168,10 +1990,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "F6-04",
@@ -2212,10 +2031,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "G1-02",
@@ -2229,10 +2045,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "G1-03",
@@ -2360,10 +2173,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "G4-03",
@@ -2431,10 +2241,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "G5-04",
@@ -2511,10 +2318,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "H1-05",
@@ -2546,10 +2350,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "H2-02",
@@ -2617,10 +2418,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "H3-04",
@@ -2634,10 +2432,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "H3-05",
@@ -2669,10 +2464,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "H4-02",
@@ -2728,10 +2520,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "H5-02",
@@ -2757,10 +2546,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "references": [
-                {"targetId": "A1-01", "type": "used_by", "description": "与账龄指标一起使用"},
-                {"targetId": "B2-05", "type": "related_to", "description": "与资金流向分析相关"}
-            ]
+            "references": []
           },
           {
             "id": "H5-04",
