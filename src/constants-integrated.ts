@@ -22,7 +22,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "注册2024-01-15，当前2025-01-13",
             "riskInterpretation": "新账户（<30天）更易涉及一次性套利行为",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "A1-02",
@@ -34,7 +36,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "已完成身份证+人脸认证",
             "riskInterpretation": "低KYC等级账户更易被用于违规操作",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["身份验证模块", "风险评估引擎", "合规审查系统"]
           },
           {
             "id": "A1-03",
@@ -64,7 +68,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "过去1年被限制2次",
             "riskInterpretation": "累犯用户风险更高，需从重处置",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "A2-02",
@@ -76,7 +82,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "过去1年交易过BTC/ETH/DOGE共3个币种",
             "riskInterpretation": "仅交易单一小币种的账户更可疑",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "A2-03",
@@ -88,7 +96,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "历史100笔交易平均持仓2.5小时",
             "riskInterpretation": "与当前交易对比，突然缩短提示异常",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "A2-04",
@@ -100,7 +110,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "历史100笔交易平均收益率3.2%",
             "riskInterpretation": "与当前交易对比，突然飙升提示异常",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "A2-05",
@@ -172,7 +184,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "完成L3认证，额度500万USDT",
             "riskInterpretation": "低认证等级下大额交易提示风险",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "A4-02",
@@ -184,7 +198,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "绑定手机+邮箱+GA+人脸",
             "riskInterpretation": "安全绑定越完整，越不容易被盗用",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "A4-03",
@@ -196,7 +212,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "100笔交易中98笔使用2FA",
             "riskInterpretation": "不使用2FA的高频交易风险极高",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "A4-04",
@@ -226,7 +244,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "注册设备与当前设备指纹相同",
             "riskInterpretation": "频繁更换设备提示异常行为",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "A5-02",
@@ -238,7 +258,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "10次登录使用5个不同IP",
             "riskInterpretation": "IP频繁变化提示使用代理或多地操作",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "A5-03",
@@ -250,7 +272,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "所有操作在北京时区",
             "riskInterpretation": "跨时区操作提示国际化团队或异常行为",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "A5-04",
@@ -262,7 +286,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "相似度0.85",
             "riskInterpretation": "行为模式突变提示账户被接管",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "A5-05",
@@ -337,7 +363,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "充值到账14:00:00，首笔交易14:02:30",
             "riskInterpretation": "充值后立即交易（<5分钟）提示预谋行为",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "B1-05",
@@ -403,7 +431,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "卖出15:00:00，提币15:03:22",
             "riskInterpretation": "交易后立即提币（<10分钟）是套利闭环特征",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "B2-05",
@@ -433,7 +463,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "充值50,000，提币65,000",
             "riskInterpretation": ">1说明有盈利离场，配合短周期高度可疑",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "B3-02",
@@ -445,7 +477,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "充值来源与提币目标有共同上游",
             "riskInterpretation": "=1说明资金原路返回，典型套利闭环",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "B3-03",
@@ -457,7 +491,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "充值13:00，提币16:30",
             "riskInterpretation": "时间极短（<6小时）提示\"快进快出\"套利",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "B3-04",
@@ -523,7 +559,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "来源地址1年前首次交易",
             "riskInterpretation": "<7天的新鲜资金高度可疑",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "B4-03",
@@ -565,7 +603,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "多笔小额+少量大额",
             "riskInterpretation": "金额过于均匀提示自动化操作",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "B5-02",
@@ -577,7 +617,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "间隔时间高度规律",
             "riskInterpretation": "时间规律提示程序化操作",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "B5-03",
@@ -652,7 +694,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "1小时内12笔 → 60÷11",
             "riskInterpretation": "间隔极短且规律提示自动化交易",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "C1-04",
@@ -682,7 +726,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "买入14:32:15，卖出14:32:58",
             "riskInterpretation": "<60秒属于\"极短线\"高风险特征",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "C2-02",
@@ -694,7 +740,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "5笔持仓：43s/51s/38s/55s/47s",
             "riskInterpretation": "持续极短持仓提示系统性套利",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "C2-03",
@@ -706,7 +754,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "5笔交易最长55秒",
             "riskInterpretation": "最长仍<60秒说明全部为极短线",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "C2-04",
@@ -760,7 +810,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "买入1,000，卖出1,085",
             "riskInterpretation": "单笔收益率过高（>10%短周期）提示异常",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "C3-04",
@@ -796,7 +848,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "10次交易8次盈利",
             "riskInterpretation": "胜率持续>70%统计上异常",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "C3-07",
@@ -838,7 +892,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "用户开仓使用50倍杠杆",
             "riskInterpretation": "高杠杆（>20倍）配合极短持仓为刷单特征",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "C4-02",
@@ -850,7 +906,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "使用50倍，最大125倍",
             "riskInterpretation": "持续使用高杠杆提示激进套利",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "C4-03",
@@ -880,7 +938,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "网格策略相关系数0.95",
             "riskInterpretation": "策略过于一致提示程序化交易",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "C5-02",
@@ -892,7 +952,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "价格上涨时成交量放大",
             "riskInterpretation": "异常配合提示操纵行为",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "C5-03",
@@ -946,7 +1008,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "1天持有VaR为5%",
             "riskInterpretation": "衡量组合风险敞口",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "C6-02",
@@ -970,7 +1034,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "账户最高10万，最低8万",
             "riskInterpretation": "回撤过大提示激进策略",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "C6-04",
@@ -982,7 +1048,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "日收益率波动15%",
             "riskInterpretation": "波动异常高提示高风险操作",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "C6-05",
@@ -1021,7 +1089,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "最低价1.000，买入价1.002",
             "riskInterpretation": "<1%说明精准买在最低点附近",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "D1-02",
@@ -1033,7 +1103,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "最低1.000，最高1.100，买入1.015",
             "riskInterpretation": "<20%说明买在价格分布底部",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "D1-03",
@@ -1063,7 +1135,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "最高价1.100，卖出价1.097",
             "riskInterpretation": "<1%说明精准卖在最高点附近",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "D2-02",
@@ -1075,7 +1149,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "最低1.000，最高1.100，卖出1.097",
             "riskInterpretation": ">80%说明卖在价格分布顶部",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "D2-03",
@@ -1105,7 +1181,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "买入14:55，拉升启动15:00",
             "riskInterpretation": "<10分钟属于\"精准埋伏\"特征",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "D3-02",
@@ -1117,7 +1195,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "拉升启动15:00，卖出15:08",
             "riskInterpretation": "<15分钟属于\"精准逃顶\"特征",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "D3-03",
@@ -1129,7 +1209,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "卖出15:08，价格见顶15:10",
             "riskInterpretation": "<5分钟说明提前知晓顶部位置",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "D3-04",
@@ -1141,7 +1223,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "5笔交易中3笔双向命中",
             "riskInterpretation": ">50%说明\"买最低卖最高\"成为模式",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "D3-05",
@@ -1183,7 +1267,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "10次交易8次方向正确",
             "riskInterpretation": "准确率过高提示内幕信息",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "D4-02",
@@ -1195,7 +1281,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "最佳时机15:00，实际15:02",
             "riskInterpretation": "偏离过小说明精准时机把握",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "D4-03",
@@ -1249,7 +1337,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "平均成交耗时0.5秒",
             "riskInterpretation": "速度过快提示优先成交权",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "D5-03",
@@ -1300,7 +1390,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "用户成交5,000，时段总成交20,000",
             "riskInterpretation": ">20%说明对行情有显著影响力",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "E1-02",
@@ -1312,7 +1404,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "用户买入3,000，时段买盘10,000",
             "riskInterpretation": ">30%说明主导买盘",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "E1-03",
@@ -1324,7 +1418,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "用户卖出3,200，时段卖盘12,000",
             "riskInterpretation": ">30%说明主导卖盘",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "E1-04",
@@ -1366,7 +1462,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "成交前1.000，成交后1.015",
             "riskInterpretation": ">1%说明单笔成交即引发价格波动",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "E2-02",
@@ -1378,7 +1476,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "买入前1.000，买入后1.020",
             "riskInterpretation": "买入即涨是\"行情跟随\"特征",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "E2-03",
@@ -1438,7 +1538,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "2小时内成交80%",
             "riskInterpretation": "高度集中提示时间窗口操纵",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "E4-02",
@@ -1462,7 +1564,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "交易后成交量放大300%",
             "riskInterpretation": "成交量脉冲提示异常活跃",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "E4-04",
@@ -1492,7 +1596,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "价差从0.1%扩大到0.3%",
             "riskInterpretation": "价差扩大提示流动性恶化",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "E5-02",
@@ -1555,7 +1661,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "相同设备登录40次，总登录100次",
             "riskInterpretation": ">30%提示同一人控制多账户",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "F1-02",
@@ -1585,7 +1693,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "相同IP登录35次，总登录90次",
             "riskInterpretation": ">30%提示账户关联",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "F2-02",
@@ -1627,7 +1737,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "A下单1705123456789ms，B下单1705123456812ms",
             "riskInterpretation": "<100毫秒提示程序化协同下单",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "F3-02",
@@ -1639,7 +1751,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "A交易20次，B交易18次，同向15次",
             "riskInterpretation": ">70%提示协同操作",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "F3-03",
@@ -1651,7 +1765,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "A成交20次，B成交18次，互为对手15次",
             "riskInterpretation": ">50%属于异常高频对敲",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "F3-04",
@@ -1663,7 +1779,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "A亏损500，B盈利520 → 1-20÷520",
             "riskInterpretation": ">90%说明盈亏完美对冲",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "F3-05",
@@ -1729,7 +1847,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "A有3个来源，B有2个来源，重合2个",
             "riskInterpretation": ">50%提示资金来源相同",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "F4-02",
@@ -1741,7 +1861,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "A提到2个地址，B提到2个地址，重合1个",
             "riskInterpretation": ">30%提示资金去向相同",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "F4-03",
@@ -1771,7 +1893,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "相似度0.85",
             "riskInterpretation": ">0.8提示同一人操作",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "F5-02",
@@ -1825,7 +1949,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "距离<10km",
             "riskInterpretation": "距离过近提示同一物理位置",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "F6-02",
@@ -1849,7 +1975,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "直接关联3个，间接关联8个",
             "riskInterpretation": "网络规模大提示组织化操作",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "F6-04",
@@ -1888,7 +2016,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "用户→A→B→项目方",
             "riskInterpretation": "≤3跳通常认为存在直接关联",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "G1-02",
@@ -1900,7 +2030,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "用户与项目方存在2跳关联",
             "riskInterpretation": ">0.5提示与项目方有关联",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "G1-03",
@@ -2026,7 +2158,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "聚类内平均每月交易1000次",
             "riskInterpretation": "活跃度异常提示大规模操作",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "G4-03",
@@ -2092,7 +2226,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "累计转移100万USDT",
             "riskInterpretation": "大规模桥接提示资金调动",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "G5-04",
@@ -2167,7 +2303,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "启动15:00，见顶15:12",
             "riskInterpretation": "短时间大幅拉升更可疑",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "H1-05",
@@ -2197,7 +2335,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "异常时段500万，平均100万",
             "riskInterpretation": ">3倍属于异常放量",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "H2-02",
@@ -2263,7 +2403,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "外部放量15:00:05，用户交易15:00:02",
             "riskInterpretation": "<10秒提示跨平台协同操纵",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "H3-04",
@@ -2275,7 +2417,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "公告发布14:50，用户买入14:55",
             "riskInterpretation": "公告后买入属于合法，公告前买入可疑",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "H3-05",
@@ -2305,7 +2449,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "外部上涨后5秒本平台响应",
             "riskInterpretation": "延迟过短提示操纵同步",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "H4-02",
@@ -2359,7 +2505,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "用户80%，市场平均60%",
             "riskInterpretation": "准确率显著领先提示内幕信息",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "H5-02",
@@ -2383,7 +2531,9 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "calculationCase": "综合评分85分",
             "riskInterpretation": "强度过高提示严重操纵",
             "priority": "P0",
-            "status": "active"
+            "status": "active",
+            "indicatorType": "base",
+            "usages": ["实时监控面板", "风控规则引擎", "用户画像分析"]
           },
           {
             "id": "H5-04",

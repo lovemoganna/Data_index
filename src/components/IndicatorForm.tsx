@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Indicator, Priority, Category } from '../types';
-import { X, ChevronRight, Hash, ShieldCheck, Zap, Info, Binary, Target, Lightbulb } from 'lucide-react';
+import { Indicator, Priority, Category, IndicatorType } from '../types';
+import { X, ChevronRight, Hash, ShieldCheck, Zap, Info, Binary, Target, Lightbulb, Layers, Link2 } from 'lucide-react';
 
 interface Props {
   initialData?: Indicator;
@@ -19,16 +19,18 @@ export const IndicatorForm: React.FC<Props> = ({
   const [selectedSubId, setSelectedSubId] = useState(initialSubId);
   
   const [formData, setFormData] = useState<Indicator>({
-    id: '', 
-    name: '', 
-    definition: '', 
+    id: '',
+    name: '',
+    definition: '',
     purpose: '',
-    formula: '', 
+    formula: '',
     threshold: '',
     calculationCase: '',
     riskInterpretation: '',
-    priority: 'P1', 
-    status: 'active'
+    priority: 'P1',
+    status: 'active',
+    indicatorType: 'derived',
+    usages: []
   });
 
   useEffect(() => {
@@ -43,7 +45,7 @@ export const IndicatorForm: React.FC<Props> = ({
         setSelectedCatId(defCat);
         setSelectedSubId(defSub);
         setFormData({
-            id: '', name: '', definition: '', purpose: '', formula: '', threshold: '', calculationCase: '', riskInterpretation: '', priority: 'P1', status: 'active'
+            id: '', name: '', definition: '', purpose: '', formula: '', threshold: '', calculationCase: '', riskInterpretation: '', priority: 'P1', status: 'active', indicatorType: 'derived', usages: []
         });
       }
     }
@@ -100,8 +102,15 @@ export const IndicatorForm: React.FC<Props> = ({
                     <label className="text-[10px] font-black text-slate-400 uppercase mb-2 block tracking-wider">风险等级</label>
                     <select value={formData.priority} onChange={e => setFormData({...formData, priority: e.target.value as Priority})} className="w-full p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 outline-none font-bold text-xs">
                         <option value="P0">P0 - 实时阻断 (Critical)</option>
-                        <option value="P1 - 核心审计 (High)">P1 - 核心审计 (High)</option>
-                        <option value="P2 - 观测记录 (Low)">P2 - 观测记录 (Low)</option>
+                        <option value="P1">P1 - 核心审计 (High)</option>
+                        <option value="P2">P2 - 观测记录 (Low)</option>
+                    </select>
+                </div>
+                <div className="col-span-1">
+                    <label className="text-[10px] font-black text-purple-500 uppercase mb-2 flex items-center gap-1.5"><Layers size={12}/> 指标性质</label>
+                    <select value={formData.indicatorType} onChange={e => setFormData({...formData, indicatorType: e.target.value as IndicatorType})} className="w-full p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 outline-none font-bold text-xs">
+                        <option value="base">基础指标 - 无需额外计算</option>
+                        <option value="derived">衍生指标 - 需要计算逻辑</option>
                     </select>
                 </div>
             </div>
@@ -136,6 +145,17 @@ export const IndicatorForm: React.FC<Props> = ({
                     <div>
                         <label className="text-[10px] font-black text-green-500 uppercase mb-2 flex items-center gap-1.5"><Lightbulb size={12}/> 典型计算案例</label>
                         <textarea value={formData.calculationCase} onChange={e => setFormData({...formData, calculationCase: e.target.value})} rows={2} className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 outline-none text-xs leading-relaxed" placeholder="提供一个易于理解的数值计算实例..." />
+                    </div>
+                    <div>
+                        <label className="text-[10px] font-black text-cyan-500 uppercase mb-2 flex items-center gap-1.5"><Link2 size={12}/> 调用方 (双向链接)</label>
+                        <textarea
+                            value={formData.usages.join('\n')}
+                            onChange={e => setFormData({...formData, usages: e.target.value.split('\n').filter(u => u.trim())})}
+                            rows={3}
+                            className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 outline-none text-xs leading-relaxed"
+                            placeholder="输入使用此指标的模块或场景，每行一个：&#10;• 实时监控面板&#10;• 风控规则引擎&#10;• 用户画像分析"
+                        />
+                        <div className="text-[9px] text-slate-400 mt-1">每行一个使用场景，支持双向链接追踪</div>
                     </div>
                 </div>
             </div>

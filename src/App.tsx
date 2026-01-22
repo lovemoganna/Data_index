@@ -459,17 +459,19 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
             </div>
 
             <div className="flex-1 overflow-auto border border-slate-200 dark:border-slate-800 rounded-3xl bg-white dark:bg-slate-900 shadow-2xl relative custom-scrollbar">
-                <table className="w-full text-left border-collapse table-fixed min-w-[2000px]">
+                <table className="w-full text-left border-collapse table-fixed min-w-[2400px]">
                     <thead className="sticky top-0 z-40 bg-slate-50 dark:bg-slate-800 border-b-2 border-slate-200 dark:border-slate-700">
                         <tr className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.15em]">
                             <th className="w-24 px-3 py-2 border-r border-slate-200 dark:border-slate-700 sticky left-0 bg-slate-50 dark:bg-slate-800 z-50">UID</th>
                             <th className="w-56 px-3 py-2 border-r border-slate-200 dark:border-slate-700 sticky left-24 bg-slate-50 dark:bg-slate-800 z-50">指标核心名称</th>
                             <th className="w-24 px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-center">风险分级</th>
+                            <th className="w-32 px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-center bg-purple-50/40 dark:bg-purple-900/10 text-purple-600 dark:text-purple-400">指标性质</th>
                             <th className="w-72 px-3 py-2 border-r border-slate-200 dark:border-slate-700">业务本体定义</th>
                             <th className="w-72 px-3 py-2 border-r border-slate-200 dark:border-slate-700 bg-blue-50/40 dark:bg-blue-900/10 text-blue-600 dark:text-blue-400">指标作用 (PURPOSE)</th>
                             <th className="w-64 px-3 py-2 border-r border-slate-200 dark:border-slate-700 font-mono text-indigo-600 dark:text-indigo-400 bg-indigo-50/30 dark:bg-indigo-900/10">计算逻辑 (FORMULA)</th>
                             <th className="w-48 px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-orange-600 dark:text-orange-400">警报阈值</th>
                             <th className="w-64 px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-green-600 dark:text-green-400">数值演算案例</th>
+                            <th className="w-80 px-3 py-2 border-r border-slate-200 dark:border-slate-700 bg-cyan-50/40 dark:bg-cyan-900/10 text-cyan-600 dark:text-cyan-400">调用方 (USAGES)</th>
                             <th className="w-96 px-3 py-2 text-red-700 dark:text-red-400">风险全景解读</th>
                         </tr>
                     </thead>
@@ -497,11 +499,32 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                                         {ind.priority}
                                     </span>
                                 </td>
+                                <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 text-center bg-purple-50/10 dark:bg-transparent">
+                                    <span className={`inline-block px-2 py-0.5 rounded-lg text-[10px] font-black ${
+                                        ind.indicatorType === 'base' ? 'bg-purple-600 text-white shadow-md shadow-purple-500/20' :
+                                        'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300'
+                                    }`}>
+                                        {ind.indicatorType === 'base' ? '基础' : '衍生'}
+                                    </span>
+                                </td>
                                 <td className={`px-2 py-2 border-r border-slate-100 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed ${isCompact ? 'truncate' : ''}`}>{ind.definition}</td>
                                 <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-700 dark:text-slate-300 leading-relaxed bg-blue-50/10 dark:bg-transparent">{ind.purpose}</td>
                                 <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 font-mono text-[11px] text-indigo-500 dark:text-indigo-300 bg-indigo-50/10 dark:bg-transparent font-bold">{ind.formula}</td>
                                 <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 text-[11px] font-black text-orange-600 dark:text-orange-400">{ind.threshold}</td>
                                 <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 text-[11px] text-green-600 dark:text-green-500 font-medium">{ind.calculationCase}</td>
+                                <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 text-[11px] text-cyan-600 dark:text-cyan-400 font-medium bg-cyan-50/10 dark:bg-transparent">
+                                    {ind.usages && ind.usages.length > 0 ? (
+                                        <div className="flex flex-wrap gap-1">
+                                            {ind.usages.map((usage, i) => (
+                                                <span key={i} className="inline-block px-1.5 py-0.5 bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300 rounded text-[9px] font-bold">
+                                                    {usage}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <span className="text-slate-400 text-[10px]">暂无调用</span>
+                                    )}
+                                </td>
                                 <td className="px-2 py-2 text-[11px] text-red-800 dark:text-red-300 font-medium leading-relaxed bg-red-50/5 dark:bg-transparent">{ind.riskInterpretation}</td>
                             </tr>
                         ))}

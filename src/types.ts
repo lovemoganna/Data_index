@@ -1,5 +1,6 @@
 export type Priority = 'P0' | 'P1' | 'P2';
 export type Status = 'active' | 'inactive';
+export type IndicatorType = 'base' | 'derived';
 
 export interface Indicator {
   id: string;
@@ -12,6 +13,8 @@ export interface Indicator {
   riskInterpretation: string; // 风险案例解读
   priority: Priority;
   status: Status;
+  indicatorType: IndicatorType; // 指标性质：基础指标(base)或衍生指标(derived)
+  usages: string[];           // 调用方：指标被哪些模块或场景使用
 }
 
 export interface SubCategory {

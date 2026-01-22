@@ -122,6 +122,20 @@ window.verifyDataIntegrity = async function() {
           } else {
             console.log(`   ❌ 分类结构不完整: 期望[${expectedIds.join(',')}]，实际[${categoryIds.join(',')}]`);
           }
+
+          // 检查指标类型分布
+          console.log('5️⃣ 指标类型分布:');
+          const baseIndicators = indicators.filter(ind => ind.indicatorType === 'base');
+          const derivedIndicators = indicators.filter(ind => ind.indicatorType === 'derived');
+          console.log(`   基础指标: ${baseIndicators.length}`);
+          console.log(`   衍生指标: ${derivedIndicators.length}`);
+
+          // 检查调用方链接
+          console.log('6️⃣ 双向链接统计:');
+          const totalUsages = indicators.reduce((sum, ind) => sum + (ind.usages ? ind.usages.length : 0), 0);
+          const indicatorsWithUsages = indicators.filter(ind => ind.usages && ind.usages.length > 0).length;
+          console.log(`   总调用关系: ${totalUsages}`);
+          console.log(`   有调用关系的指标: ${indicatorsWithUsages}/${indicators.length}`);
         } else {
           console.log('   ⚠️ 没有分类数据可以验证');
         }

@@ -5,7 +5,7 @@ import { getInitialData } from '../constants';
 import { importService } from '../utils/importService';
 
 // IndexedDB 数据库版本
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const DB_NAME = 'MECERiskOntologyDB';
 const STORAGE_KEY = 'monitor_ontology_v2'; // 用于向后兼容的localStorage key
 
@@ -18,6 +18,8 @@ interface DBIndicator extends Indicator {
   id: string;
   categoryId: string;
   subcategoryId: string;
+  indicatorType: IndicatorType;
+  usages: string[];
 }
 
 // 创建IndexedDB数据库实例
@@ -27,9 +29,24 @@ class MECERiskDB extends Dexie {
 
   constructor() {
     super(DB_NAME);
-    this.version(DB_VERSION).stores({
+    this.version(1).stores({
       categories: 'id, name, color',
       indicators: 'id, categoryId, subcategoryId, priority, status, name'
+    });
+
+    // 版本2：添加指标类型和使用情况字段
+    this.version(2).stores({
+      categories: 'id, name, color',
+      indicators: 'id, categoryId, subcategoryId, priority, status, name, indicatorType, usages'
+    }).upgrade(async (tx) => {
+      // 升级现有指标，为新字段添加默认值
+      const indicators = await tx.table('indicators').toArray();
+      for (const indicator of indicators) {
+        await tx.table('indicators').update(indicator.id, {
+          indicatorType: indicator.indicatorType || 'derived',
+          usages: indicator.usages || []
+        });
+      }
     });
   }
 }
@@ -89,11 +106,15 @@ let initializationPromise: Promise<void> | null = null;
         // 添加该分类下的所有指标
         for (const subcategory of category.subcategories) {
           for (const indicator of subcategory.indicators) {
-            await db.indicators.add({
+            // 为现有指标添加新字段的默认值
+            const enhancedIndicator = {
               ...indicator,
               categoryId: category.id,
-              subcategoryId: subcategory.id
-            });
+              subcategoryId: subcategory.id,
+              indicatorType: indicator.indicatorType || 'derived', // 默认设为衍生指标
+              usages: indicator.usages || [] // 默认空数组
+            };
+            await db.indicators.add(enhancedIndicator);
           }
         }
       }
