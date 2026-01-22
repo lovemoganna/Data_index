@@ -38,7 +38,7 @@ export const INTEGRATED_INDICATORS: Category[] = [
             "priority": "P0",
             "status": "active",
             "indicatorType": "base",
-            "usages": ["身份验证模块", "风险评估引擎", "合规审查系统"]
+            "usages": ["身份验证模块", "风险评估引擎", "合规审查系统", "账龄"]
           },
           {
             "id": "A1-03",
