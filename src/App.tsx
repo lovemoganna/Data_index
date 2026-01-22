@@ -679,14 +679,20 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                         {filteredIndicators.map(({ cat, sub, ind }, idx) => (
                             <tr key={ind.id} className={`group hover:bg-blue-50/40 dark:hover:bg-blue-900/10 transition-colors ${idx % 2 === 0 ? 'bg-white dark:bg-transparent' : 'bg-slate-50/20 dark:bg-slate-800/10'} ${linkedIndicatorId === ind.id ? 'ring-2 ring-cyan-400 bg-cyan-50/20 dark:bg-cyan-900/10' : ''}`}>
-                                <td className={`px-1 sm:px-2 py-1.5 sm:py-2 font-mono text-[8px] sm:text-[9px] md:text-[10px] font-black text-slate-400 border-r border-slate-100 dark:border-slate-800 sticky left-0 z-10 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] dark:shadow-[2px_0_4px_-2px_rgba(0,0,0,0.3)] ${linkedIndicatorId === ind.id ? 'bg-cyan-50 dark:bg-cyan-900/20' : 'bg-white dark:bg-slate-900 group-hover:bg-blue-50/40 dark:group-hover:bg-blue-900/10'}`}>{ind.id}</td>
+                                <td className={`px-1 sm:px-2 py-1.5 sm:py-2 font-mono text-[8px] sm:text-[9px] md:text-[10px] font-black text-slate-400 border-r border-slate-100 dark:border-slate-800 sticky left-0 z-10 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] dark:shadow-[2px_0_4px_-2px_rgba(0,0,0,0.3)] ${linkedIndicatorId === ind.id ? 'bg-cyan-50 dark:bg-cyan-900/20' : 'bg-white dark:bg-slate-900 group-hover:bg-blue-50/40 dark:group-hover:bg-blue-900/10'}`} title={ind.id}>
+                                    <div className="truncate max-w-[60px] sm:max-w-[80px] md:max-w-[100px]">
+                                        {ind.id}
+                                    </div>
+                                </td>
                                 <td className={`px-1 sm:px-2 py-1.5 sm:py-2 border-r border-slate-100 dark:border-slate-800 sticky left-16 sm:left-20 md:left-24 z-10 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] dark:shadow-[2px_0_4px_-2px_rgba(0,0,0,0.3)] ${linkedIndicatorId === ind.id ? 'bg-cyan-50 dark:bg-cyan-900/20' : 'bg-white dark:bg-slate-900 group-hover:bg-blue-50/40 dark:group-hover:bg-blue-900/10'}`}>
-                                    <div className="flex flex-col">
-                                        <span className="font-black text-slate-900 dark:text-white text-[11px] md:text-[12px] truncate group-hover:text-blue-600 transition-colors" title={ind.name}>{ind.name}</span>
+                                    <div className="flex flex-col min-w-0">
+                                        <div className={`font-black text-slate-900 dark:text-white text-[10px] sm:text-[11px] md:text-[12px] truncate group-hover:text-blue-600 transition-colors ${isCompact ? 'max-w-[120px] sm:max-w-[160px] md:max-w-[200px]' : 'max-w-[200px] sm:max-w-[240px] md:max-w-[280px]'}`} title={ind.name}>
+                                            {ind.name}
+                                        </div>
                                         {!isCompact && (
                                             <div className="flex items-center gap-1 mt-1">
                                                 <span className={`w-1.5 h-1.5 rounded-full ${ind.status === 'active' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'bg-slate-300'}`}></span>
-                                                <span className="text-[8px] md:text-[9px] text-slate-400 font-mono uppercase font-black">{cat.id} / {sub.id}</span>
+                                                <span className="text-[7px] sm:text-[8px] md:text-[9px] text-slate-400 font-mono uppercase font-black truncate max-w-[60px] sm:max-w-[80px] md:max-w-[100px]" title={`${cat.id} / ${sub.id}`}>{cat.id} / {sub.id}</span>
                                             </div>
                                         )}
                                     </div>
@@ -708,29 +714,49 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                                         {ind.indicatorType === 'base' ? '基础' : '衍生'}
                                     </span>
                                 </td>
-                                <td className={`px-1 sm:px-2 py-1.5 sm:py-2 border-r border-slate-100 dark:border-slate-800 text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed ${isCompact ? 'truncate max-w-[150px] sm:max-w-[200px] md:max-w-none' : ''}`}>{ind.definition}</td>
-                                <td className="px-1 sm:px-2 py-1.5 sm:py-2 border-r border-slate-100 dark:border-slate-800 text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] font-bold text-slate-700 dark:text-slate-300 leading-relaxed bg-blue-50/10 dark:bg-transparent">{ind.purpose}</td>
-                                <td className="px-1 sm:px-2 py-1.5 sm:py-2 border-r border-slate-100 dark:border-slate-800 font-mono text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] text-indigo-500 dark:text-indigo-300 bg-indigo-50/10 dark:bg-transparent font-bold">{ind.formula}</td>
-                                <td className="px-1 sm:px-2 py-1.5 sm:py-2 border-r border-slate-100 dark:border-slate-800 text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] font-black text-orange-600 dark:text-orange-400">{ind.threshold}</td>
-                                <td className="px-1 sm:px-2 py-1.5 sm:py-2 border-r border-slate-100 dark:border-slate-800 text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] text-green-600 dark:text-green-500 font-medium">{ind.calculationCase}</td>
+                                <td className="px-1 sm:px-2 py-1.5 sm:py-2 border-r border-slate-100 dark:border-slate-800 text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                                    <div className={`truncate ${isCompact ? 'max-w-[120px] sm:max-w-[180px] md:max-w-[220px] lg:max-w-[280px]' : 'max-w-[200px] sm:max-w-[280px] md:max-w-[360px] lg:max-w-[440px]'}`} title={ind.definition}>
+                                        {ind.definition}
+                                    </div>
+                                </td>
+                                <td className="px-1 sm:px-2 py-1.5 sm:py-2 border-r border-slate-100 dark:border-slate-800 text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] font-bold text-slate-700 dark:text-slate-300 leading-relaxed bg-blue-50/10 dark:bg-transparent">
+                                    <div className={`truncate ${isCompact ? 'max-w-[120px] sm:max-w-[180px] md:max-w-[220px] lg:max-w-[280px]' : 'max-w-[200px] sm:max-w-[280px] md:max-w-[360px] lg:max-w-[440px]'}`} title={ind.purpose}>
+                                        {ind.purpose}
+                                    </div>
+                                </td>
+                                <td className="px-1 sm:px-2 py-1.5 sm:py-2 border-r border-slate-100 dark:border-slate-800 font-mono text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] text-indigo-500 dark:text-indigo-300 bg-indigo-50/10 dark:bg-transparent font-bold">
+                                    <div className={`truncate ${isCompact ? 'max-w-[100px] sm:max-w-[140px] md:max-w-[180px] lg:max-w-[220px]' : 'max-w-[160px] sm:max-w-[220px] md:max-w-[280px] lg:max-w-[340px]'}`} title={ind.formula}>
+                                        {ind.formula}
+                                    </div>
+                                </td>
+                                <td className="px-1 sm:px-2 py-1.5 sm:py-2 border-r border-slate-100 dark:border-slate-800 text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] font-black text-orange-600 dark:text-orange-400">
+                                    <div className={`truncate ${isCompact ? 'max-w-[80px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-[140px]' : 'max-w-[120px] sm:max-w-[160px] md:max-w-[200px] lg:max-w-[240px]'}`} title={ind.threshold}>
+                                        {ind.threshold}
+                                    </div>
+                                </td>
+                                <td className="px-1 sm:px-2 py-1.5 sm:py-2 border-r border-slate-100 dark:border-slate-800 text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] text-green-600 dark:text-green-500 font-medium">
+                                    <div className={`truncate ${isCompact ? 'max-w-[100px] sm:max-w-[140px] md:max-w-[180px] lg:max-w-[220px]' : 'max-w-[160px] sm:max-w-[220px] md:max-w-[280px] lg:max-w-[340px]'}`} title={ind.calculationCase}>
+                                        {ind.calculationCase}
+                                    </div>
+                                </td>
                                 <td className="px-1 sm:px-2 py-1.5 sm:py-2 border-r border-slate-100 dark:border-slate-800 text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] text-cyan-600 dark:text-cyan-400 font-medium bg-cyan-50/10 dark:bg-transparent hidden lg:table-cell xl:table-cell">
                                     {ind.references && ind.references.length > 0 ? (
-                                        <div className="flex flex-wrap gap-1 max-w-[200px] sm:max-w-[250px] md:max-w-[300px]">
+                                        <div className="flex flex-wrap gap-1 max-w-[160px] sm:max-w-[200px] md:max-w-[240px] lg:max-w-[280px]">
                                             {ind.references.slice(0, 2).map((ref, i) => {
                                                 const targetName = indicatorNameMap.get(ref.targetId) || ref.targetId;
                                                 return (
                                                     <button
                                                         key={i}
                                                         onClick={() => handleReferenceClick(ref.targetId)}
-                                                        className={`inline-block px-1 sm:px-1.5 py-0.5 bg-cyan-100 dark:bg-cyan-900/40 hover:bg-cyan-200 dark:hover:bg-cyan-800/60 text-cyan-700 dark:text-cyan-300 rounded text-[7px] sm:text-[8px] md:text-[9px] font-bold truncate max-w-[60px] sm:max-w-[70px] md:max-w-[80px] transition-all cursor-pointer hover:shadow-sm active:scale-95 ${linkedIndicatorId === ind.id ? 'ring-2 ring-cyan-400' : ''}`}
-                                                        title={`点击跳转到指标: ${targetName}`}
+                                                        className={`inline-block px-1 sm:px-1.5 py-0.5 bg-cyan-100 dark:bg-cyan-900/40 hover:bg-cyan-200 dark:hover:bg-cyan-800/60 text-cyan-700 dark:text-cyan-300 rounded text-[7px] sm:text-[8px] md:text-[9px] font-bold truncate max-w-[50px] sm:max-w-[60px] md:max-w-[70px] transition-all cursor-pointer hover:shadow-sm active:scale-95 ${linkedIndicatorId === ind.id ? 'ring-2 ring-cyan-400' : ''}`}
+                                                        title={`点击跳转到指标: ${targetName} (${ref.type})`}
                                                     >
                                                         🔗 {targetName}
                                                     </button>
                                                 );
                                             })}
                                             {ind.references.length > 2 && (
-                                                <span className="inline-block px-1 sm:px-1.5 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 rounded text-[7px] sm:text-[8px] md:text-[9px] font-bold">
+                                                <span className="inline-block px-1 sm:px-1.5 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 rounded text-[7px] sm:text-[8px] md:text-[9px] font-bold" title={`还有 ${ind.references.length - 2} 个引用`}>
                                                     +{ind.references.length - 2}
                                                 </span>
                                             )}
@@ -739,7 +765,11 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                                         <span className="text-slate-400 text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px]">暂无引用</span>
                                     )}
                                 </td>
-                                <td className="px-1 sm:px-2 py-1.5 sm:py-2 text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] text-red-800 dark:text-red-300 font-medium leading-relaxed bg-red-50/5 dark:bg-transparent">{ind.riskInterpretation}</td>
+                                <td className="px-1 sm:px-2 py-1.5 sm:py-2 text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] text-red-800 dark:text-red-300 font-medium leading-relaxed bg-red-50/5 dark:bg-transparent">
+                                    <div className={`truncate ${isCompact ? 'max-w-[180px] sm:max-w-[240px] md:max-w-[300px] lg:max-w-[360px]' : 'max-w-[280px] sm:max-w-[360px] md:max-w-[440px] lg:max-w-[520px]'}`} title={ind.riskInterpretation}>
+                                        {ind.riskInterpretation}
+                                    </div>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
