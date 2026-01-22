@@ -313,14 +313,14 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
         </div>
       </header>
 
-      <main className="w-full min-h-screen px-2 py-1">
+      <main className="w-full min-h-screen px-1 py-0.5">
         {activeTab === 'monitor' && (
           <div className={`flex flex-col h-[calc(100vh-80px)] animate-in slide-in-from-bottom-2 duration-500`}>
             <LoadingOverlay isVisible={isLoading} message="正在加载数据...">
-              <div className={`flex gap-2 mb-6 overflow-x-auto pb-2 custom-scrollbar ${isMobile ? 'flex-wrap' : ''}`}>
+              <div className={`flex gap-1.5 mb-3 overflow-x-auto pb-2 custom-scrollbar ${isMobile ? 'flex-wrap' : ''}`}>
                   <button
                       onClick={() => { setSelectedCatId('ALL'); setSelectedSubId('ALL'); }}
-                      className={`flex flex-col items-center justify-center ${isMobile ? 'min-w-[80px] p-2' : 'min-w-[100px] p-3'} rounded-2xl border-2 transition-all ${selectedCatId === 'ALL' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600' : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-850 text-slate-400'}`}
+                      className={`flex flex-col items-center justify-center ${isMobile ? 'min-w-[80px] p-1.5' : 'min-w-[100px] p-2'} rounded-2xl border-2 transition-all ${selectedCatId === 'ALL' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600' : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-850 text-slate-400'}`}
                   >
                       <LayoutGrid size={isMobile ? 20 : 24} className="mb-1" />
                       <span className={`font-black uppercase ${isMobile ? 'text-[9px]' : 'text-[11px]'}`}>全部维度</span>
@@ -329,7 +329,7 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                       <button
                           key={cat.id}
                           onClick={() => { setSelectedCatId(cat.id); setSelectedSubId('ALL'); }}
-                          className={`flex flex-col items-start justify-between ${isMobile ? 'min-w-[160px] p-3' : 'min-w-[200px] p-4'} rounded-2xl border-2 transition-all ${selectedCatId === cat.id ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-xl shadow-blue-500/10' : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-850 opacity-60 hover:opacity-100'}`}
+                          className={`flex flex-col items-start justify-between ${isMobile ? 'min-w-[160px] p-2' : 'min-w-[200px] p-3'} rounded-2xl border-2 transition-all ${selectedCatId === cat.id ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-xl shadow-blue-500/10' : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-850 opacity-60 hover:opacity-100'}`}
                       >
                           <div className="flex justify-between w-full mb-2">
                               <div className={`p-1.5 rounded-lg bg-white dark:bg-slate-800 shadow-sm ${selectedCatId === cat.id ? 'text-blue-600' : 'text-slate-400'}`}>
@@ -349,7 +349,7 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
             </LoadingOverlay>
 
             {selectedCatId !== 'ALL' && activeCategory && (
-                <div className="flex items-center gap-2 mb-6 p-2 bg-slate-100 dark:bg-slate-800 rounded-2xl w-fit border border-slate-200 dark:border-slate-700">
+                <div className="flex items-center gap-1.5 mb-3 p-1.5 bg-slate-100 dark:bg-slate-800 rounded-2xl w-fit border border-slate-200 dark:border-slate-700">
                     <div className="flex items-center gap-2 px-3 pr-4 border-r border-slate-300 dark:border-slate-600 text-[11px] font-black text-slate-500 uppercase tracking-widest">
                         <Filter size={12}/> 细分场景
                     </div>
@@ -371,7 +371,7 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                 </div>
             )}
 
-            <div className="flex items-center justify-between mb-2 px-2">
+            <div className="flex items-center justify-between mb-1.5 px-1">
                 <div className="flex items-center gap-4 flex-1">
                     <div className="relative w-full max-w-sm">
                         <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -462,22 +462,22 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                 <table className="w-full text-left border-collapse table-fixed min-w-[2000px]">
                     <thead className="sticky top-0 z-40 bg-slate-50 dark:bg-slate-800 border-b-2 border-slate-200 dark:border-slate-700">
                         <tr className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.15em]">
-                            <th className="w-24 px-6 py-5 border-r border-slate-200 dark:border-slate-700 sticky left-0 bg-slate-50 dark:bg-slate-800 z-50">UID</th>
-                            <th className="w-56 px-6 py-5 border-r border-slate-200 dark:border-slate-700 sticky left-24 bg-slate-50 dark:bg-slate-800 z-50">指标核心名称</th>
-                            <th className="w-24 px-6 py-5 border-r border-slate-200 dark:border-slate-700 text-center">风险分级</th>
-                            <th className="w-72 px-6 py-5 border-r border-slate-200 dark:border-slate-700">业务本体定义</th>
-                            <th className="w-72 px-6 py-5 border-r border-slate-200 dark:border-slate-700 bg-blue-50/40 dark:bg-blue-900/10 text-blue-600 dark:text-blue-400">指标作用 (PURPOSE)</th>
-                            <th className="w-64 px-6 py-5 border-r border-slate-200 dark:border-slate-700 font-mono text-indigo-600 dark:text-indigo-400 bg-indigo-50/30 dark:bg-indigo-900/10">计算逻辑 (FORMULA)</th>
-                            <th className="w-48 px-6 py-5 border-r border-slate-200 dark:border-slate-700 text-orange-600 dark:text-orange-400">警报阈值</th>
-                            <th className="w-64 px-6 py-5 border-r border-slate-200 dark:border-slate-700 text-green-600 dark:text-green-400">数值演算案例</th>
-                            <th className="w-96 px-6 py-5 text-red-700 dark:text-red-400">风险全景解读</th>
+                            <th className="w-24 px-3 py-2 border-r border-slate-200 dark:border-slate-700 sticky left-0 bg-slate-50 dark:bg-slate-800 z-50">UID</th>
+                            <th className="w-56 px-3 py-2 border-r border-slate-200 dark:border-slate-700 sticky left-24 bg-slate-50 dark:bg-slate-800 z-50">指标核心名称</th>
+                            <th className="w-24 px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-center">风险分级</th>
+                            <th className="w-72 px-3 py-2 border-r border-slate-200 dark:border-slate-700">业务本体定义</th>
+                            <th className="w-72 px-3 py-2 border-r border-slate-200 dark:border-slate-700 bg-blue-50/40 dark:bg-blue-900/10 text-blue-600 dark:text-blue-400">指标作用 (PURPOSE)</th>
+                            <th className="w-64 px-3 py-2 border-r border-slate-200 dark:border-slate-700 font-mono text-indigo-600 dark:text-indigo-400 bg-indigo-50/30 dark:bg-indigo-900/10">计算逻辑 (FORMULA)</th>
+                            <th className="w-48 px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-orange-600 dark:text-orange-400">警报阈值</th>
+                            <th className="w-64 px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-green-600 dark:text-green-400">数值演算案例</th>
+                            <th className="w-96 px-3 py-2 text-red-700 dark:text-red-400">风险全景解读</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                         {filteredIndicators.map(({ cat, sub, ind }, idx) => (
                             <tr key={ind.id} className={`group hover:bg-blue-50/40 dark:hover:bg-blue-900/10 transition-colors ${idx % 2 === 0 ? 'bg-white dark:bg-transparent' : 'bg-slate-50/20 dark:bg-slate-800/10'}`}>
-                                <td className="px-6 py-4 font-mono text-[10px] font-black text-slate-400 border-r border-slate-100 dark:border-slate-800 sticky left-0 bg-inherit z-10">{ind.id}</td>
-                                <td className="px-6 py-4 border-r border-slate-100 dark:border-slate-800 sticky left-24 bg-inherit z-10">
+                                <td className="px-2 py-2 font-mono text-[10px] font-black text-slate-400 border-r border-slate-100 dark:border-slate-800 sticky left-0 bg-inherit z-10">{ind.id}</td>
+                                <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 sticky left-24 bg-inherit z-10">
                                     <div className="flex flex-col">
                                         <span className="font-black text-slate-900 dark:text-white text-[12px] truncate group-hover:text-blue-600 transition-colors" title={ind.name}>{ind.name}</span>
                                         {!isCompact && (
@@ -488,21 +488,21 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                                         )}
                                     </div>
                                 </td>
-                                <td className="px-6 py-4 border-r border-slate-100 dark:border-slate-800 text-center">
-                                    <span className={`inline-block px-3 py-1 rounded-lg text-[10px] font-black ${
-                                        ind.priority === 'P0' ? 'bg-red-600 text-white shadow-md shadow-red-500/20' : 
-                                        ind.priority === 'P1' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300' : 
+                                <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 text-center">
+                                    <span className={`inline-block px-2 py-0.5 rounded-lg text-[10px] font-black ${
+                                        ind.priority === 'P0' ? 'bg-red-600 text-white shadow-md shadow-red-500/20' :
+                                        ind.priority === 'P1' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300' :
                                         'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'
                                     }`}>
                                         {ind.priority}
                                     </span>
                                 </td>
-                                <td className={`px-6 py-4 border-r border-slate-100 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed ${isCompact ? 'truncate' : ''}`}>{ind.definition}</td>
-                                <td className="px-6 py-4 border-r border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-700 dark:text-slate-300 leading-relaxed bg-blue-50/10 dark:bg-transparent">{ind.purpose}</td>
-                                <td className="px-6 py-4 border-r border-slate-100 dark:border-slate-800 font-mono text-[11px] text-indigo-500 dark:text-indigo-300 bg-indigo-50/10 dark:bg-transparent font-bold">{ind.formula}</td>
-                                <td className="px-6 py-4 border-r border-slate-100 dark:border-slate-800 text-[11px] font-black text-orange-600 dark:text-orange-400">{ind.threshold}</td>
-                                <td className="px-6 py-4 border-r border-slate-100 dark:border-slate-800 text-[11px] text-green-600 dark:text-green-500 font-medium">{ind.calculationCase}</td>
-                                <td className="px-6 py-4 text-[11px] text-red-800 dark:text-red-300 font-medium leading-relaxed bg-red-50/5 dark:bg-transparent">{ind.riskInterpretation}</td>
+                                <td className={`px-2 py-2 border-r border-slate-100 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed ${isCompact ? 'truncate' : ''}`}>{ind.definition}</td>
+                                <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-700 dark:text-slate-300 leading-relaxed bg-blue-50/10 dark:bg-transparent">{ind.purpose}</td>
+                                <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 font-mono text-[11px] text-indigo-500 dark:text-indigo-300 bg-indigo-50/10 dark:bg-transparent font-bold">{ind.formula}</td>
+                                <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 text-[11px] font-black text-orange-600 dark:text-orange-400">{ind.threshold}</td>
+                                <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 text-[11px] text-green-600 dark:text-green-500 font-medium">{ind.calculationCase}</td>
+                                <td className="px-2 py-2 text-[11px] text-red-800 dark:text-red-300 font-medium leading-relaxed bg-red-50/5 dark:bg-transparent">{ind.riskInterpretation}</td>
                             </tr>
                         ))}
                     </tbody>
