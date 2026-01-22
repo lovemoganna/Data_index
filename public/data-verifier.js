@@ -22,53 +22,75 @@ window.verifyDataIntegrity = async function() {
     dbRequest.onsuccess = function(event) {
       const db = event.target.result;
 
-      // 检查categories表
-      const categoryTransaction = db.transaction(['categories'], 'readonly');
-      const categoryStore = categoryTransaction.objectStore('categories');
-      const categoryRequest = categoryStore.getAll();
+      try {
+        // 检查categories表
+        const categoryTransaction = db.transaction(['categories'], 'readonly');
+        const categoryStore = categoryTransaction.objectStore('categories');
+        const categoryRequest = categoryStore.getAll();
 
-      categoryRequest.onsuccess = function() {
-        const categories = categoryRequest.result;
-        console.log(`   分类数量: ${categories.length}`);
+        categoryRequest.onsuccess = function() {
+          const categories = categoryRequest.result;
+          console.log(`   分类数量: ${categories.length}`);
 
-        // 检查indicators表
-        const indicatorTransaction = db.transaction(['indicators'], 'readonly');
-        const indicatorStore = indicatorTransaction.objectStore('indicators');
-        const indicatorRequest = indicatorStore.getAll();
+          try {
+            // 检查indicators表
+            const indicatorTransaction = db.transaction(['indicators'], 'readonly');
+            const indicatorStore = indicatorTransaction.objectStore('indicators');
+            const indicatorRequest = indicatorStore.getAll();
 
-        indicatorRequest.onsuccess = function() {
-          const indicators = indicatorRequest.result;
-          console.log(`   指标数量: ${indicators.length}`);
+            indicatorRequest.onsuccess = function() {
+              const indicators = indicatorRequest.result;
+              console.log(`   指标数量: ${indicators.length}`);
 
-          // 验证数据完整性
-          console.log('3️⃣ 数据完整性验证:');
-          const expectedFull = 173;
-          const expectedBasic = 40;
+              // 验证数据完整性
+              console.log('3️⃣ 数据完整性验证:');
+              const expectedFull = 173;
+              const expectedBasic = 40;
 
-          if (savedMode === 'full' && indicators.length !== expectedFull) {
-            console.log(`   ❌ 完整模式数据不匹配: 期望${expectedFull}个，实际${indicators.length}个`);
-          } else if (savedMode === 'basic' && indicators.length !== expectedBasic) {
-            console.log(`   ❌ 基础模式数据不匹配: 期望${expectedBasic}个，实际${indicators.length}个`);
-          } else if (!savedMode && indicators.length !== expectedBasic) {
-            console.log(`   ❌ 默认数据不匹配: 期望${expectedBasic}个，实际${indicators.length}个`);
-          } else {
-            console.log(`   ✅ 数据数量正确 (${indicators.length}个指标)`);
+              if (savedMode === 'full' && indicators.length !== expectedFull) {
+                console.log(`   ❌ 完整模式数据不匹配: 期望${expectedFull}个，实际${indicators.length}个`);
+              } else if (savedMode === 'basic' && indicators.length !== expectedBasic) {
+                console.log(`   ❌ 基础模式数据不匹配: 期望${expectedBasic}个，实际${indicators.length}个`);
+              } else if (!savedMode && indicators.length !== expectedBasic) {
+                console.log(`   ❌ 默认数据不匹配: 期望${expectedBasic}个，实际${indicators.length}个`);
+              } else {
+                console.log(`   ✅ 数据数量正确 (${indicators.length}个指标)`);
+              }
+
+              // 检查数据结构
+              console.log('4️⃣ 数据结构检查:');
+              const categoryIds = categories.map(c => c.id).sort();
+              const expectedIds = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+
+              if (JSON.stringify(categoryIds) === JSON.stringify(expectedIds)) {
+                console.log('   ✅ 分类结构完整');
+              } else {
+                console.log(`   ❌ 分类结构不完整: 期望[${expectedIds.join(',')}]，实际[${categoryIds.join(',')}]`);
+              }
+
+              db.close();
+            };
+
+            indicatorRequest.onerror = function() {
+              console.log('   ❌ 无法访问indicators表');
+              db.close();
+            };
+          } catch (error) {
+            console.log('   ❌ indicators对象存储不存在:', error.message);
+            db.close();
           }
-
-          // 检查数据结构
-          console.log('4️⃣ 数据结构检查:');
-          const categoryIds = categories.map(c => c.id).sort();
-          const expectedIds = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-
-          if (JSON.stringify(categoryIds) === JSON.stringify(expectedIds)) {
-            console.log('   ✅ 分类结构完整');
-          } else {
-            console.log(`   ❌ 分类结构不完整: 期望[${expectedIds.join(',')}]，实际[${categoryIds.join(',')}]`);
-          }
-
-          db.close();
         };
-      };
+
+        categoryRequest.onerror = function() {
+          console.log('   ❌ 无法访问categories表');
+        };
+      } catch (error) {
+        console.log('   ❌ categories对象存储不存在:', error.message);
+      }
+    };
+
+    dbRequest.onerror = function() {
+      console.log('   ❌ 无法打开IndexedDB数据库');
     };
 
     // 3. 检查内存中的数据
