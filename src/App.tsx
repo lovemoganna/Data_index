@@ -591,8 +591,8 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                 <table className="w-full text-left border-collapse table-fixed min-w-[2000px] lg:min-w-[2400px]">
                     <thead className="sticky top-0 z-40 bg-slate-50 dark:bg-slate-800 border-b-2 border-slate-200 dark:border-slate-700">
                         <tr className="text-[9px] md:text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.15em]">
-                            <th className="w-20 md:w-24 px-2 md:px-3 py-2 border-r border-slate-200 dark:border-slate-700 sticky left-0 bg-slate-50 dark:bg-slate-800 z-50">UID</th>
-                            <th className="w-48 md:w-56 px-2 md:px-3 py-2 border-r border-slate-200 dark:border-slate-700 sticky left-20 md:left-24 bg-slate-50 dark:bg-slate-800 z-50">指标核心名称</th>
+                            <th className="w-20 md:w-24 px-2 md:px-3 py-2 border-r border-slate-200 dark:border-slate-700 sticky left-0 bg-slate-50 dark:bg-slate-800 z-50 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] dark:shadow-[2px_0_4px_-2px_rgba(0,0,0,0.3)]">UID</th>
+                            <th className="w-48 md:w-56 px-2 md:px-3 py-2 border-r border-slate-200 dark:border-slate-700 sticky left-20 md:left-24 bg-slate-50 dark:bg-slate-800 z-50 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] dark:shadow-[2px_0_4px_-2px_rgba(0,0,0,0.3)]">指标核心名称</th>
                             <th className="w-20 md:w-24 px-2 md:px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-center">风险分级</th>
                             <th className="w-24 md:w-32 px-2 md:px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-center bg-purple-50/40 dark:bg-purple-900/10 text-purple-600 dark:text-purple-400 hidden lg:table-cell">指标性质</th>
                             <th className="w-60 md:w-72 px-2 md:px-3 py-2 border-r border-slate-200 dark:border-slate-700">业务本体定义</th>
@@ -607,8 +607,8 @@ ${result.warnings.length > 0 ? `⚠️ 有 ${result.warnings.length} 个警告�
                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                         {filteredIndicators.map(({ cat, sub, ind }, idx) => (
                             <tr key={ind.id} className={`group hover:bg-blue-50/40 dark:hover:bg-blue-900/10 transition-colors ${idx % 2 === 0 ? 'bg-white dark:bg-transparent' : 'bg-slate-50/20 dark:bg-slate-800/10'} ${linkedIndicatorId === ind.id ? 'ring-2 ring-cyan-400 bg-cyan-50/20 dark:bg-cyan-900/10' : ''}`}>
-                                <td className="px-2 py-2 font-mono text-[9px] md:text-[10px] font-black text-slate-400 border-r border-slate-100 dark:border-slate-800 sticky left-0 bg-inherit z-10">{ind.id}</td>
-                                <td className="px-2 py-2 border-r border-slate-100 dark:border-slate-800 sticky left-20 md:left-24 bg-inherit z-10">
+                                <td className={`px-2 py-2 font-mono text-[9px] md:text-[10px] font-black text-slate-400 border-r border-slate-100 dark:border-slate-800 sticky left-0 z-10 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] dark:shadow-[2px_0_4px_-2px_rgba(0,0,0,0.3)] ${linkedIndicatorId === ind.id ? 'bg-cyan-50 dark:bg-cyan-900/20' : 'bg-white dark:bg-slate-900 group-hover:bg-blue-50/40 dark:group-hover:bg-blue-900/10'}`}>{ind.id}</td>
+                                <td className={`px-2 py-2 border-r border-slate-100 dark:border-slate-800 sticky left-20 md:left-24 z-10 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] dark:shadow-[2px_0_4px_-2px_rgba(0,0,0,0.3)] ${linkedIndicatorId === ind.id ? 'bg-cyan-50 dark:bg-cyan-900/20' : 'bg-white dark:bg-slate-900 group-hover:bg-blue-50/40 dark:group-hover:bg-blue-900/10'}`}>
                                     <div className="flex flex-col">
                                         <span className="font-black text-slate-900 dark:text-white text-[11px] md:text-[12px] truncate group-hover:text-blue-600 transition-colors" title={ind.name}>{ind.name}</span>
                                         {!isCompact && (
